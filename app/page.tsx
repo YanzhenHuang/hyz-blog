@@ -8,7 +8,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { columns, DataTable } from "./repo-table";
 
 // React
-import Image from "next/image";
 import Link from "next/link";
 
 const personalInfo = {
@@ -23,22 +22,35 @@ const personalInfo = {
 };
 
 export default async function Home() {
+  // User data
   const githubUserData: GitHubUserData = await fetch(
-    "https://api.github.com/users/YanzhenHuang"
+    "https://api.github.com/users/YanzhenHuang",
+    {
+      headers: {
+        Authorization: `token ${process.env.GITHUB_TOKEN}`
+      }
+    }
   ).then((res) => res.json());
 
-  const reposData: GitHubRepoData[] = await fetch(githubUserData.repos_url)
-    .then((res) => res.json())
+  // Repo list
+  const reposData: GitHubRepoData[] = await fetch(
+    githubUserData.repos_url,
+    {
+      headers: {
+        Authorization: `token ${process.env.GITHUB_TOKEN}`
+      }
+    }
+  ).then((res) => res.json())
     .catch((error) => {
-      console.error(`Error fetching repositories: ${error}.`);
-      return null;
+      // console.error(`Error fetching repositories: ${error}.`);
+      console.log(error);
+      return [];
     });
 
   return (
     <div
       className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 
-                  pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]"
-    >
+                  pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         {/* Names & Info */}
         <div className="flex flex-row w-full items-center justify-between">
@@ -52,7 +64,7 @@ export default async function Home() {
 
           {/*Avatar */}
           <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarImage src="https://s2.loli.net/2025/02/03/kVnMuKbh9OecvZY.png" />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
         </div>
@@ -60,17 +72,16 @@ export default async function Home() {
         {/* Stats */}
         <ResizablePanelGroup
           direction="horizontal"
-          className="max-w-md min-w-[800px] rounded-lg border"
-        >
+          className="max-w-md min-w-[800px] rounded-lg border">
           {/* Left main panel */}
           <ResizablePanel defaultSize={50}>
-            <div className="flex flex-col h-[400px] items-top justify-center p-6">
+            <div className="flex flex-col h-[500px] items-top justify-start p-6">
               {/** Github Account Info */}
               <div className="flex flex-row w-full gap-12 items-center">
                 {/** Github Profile */}
                 <div className="flex flex-col justify-left">
                   <p className="font-bold text-[1.5rem]">
-                    {githubUserData.login}
+                    {githubUserData.login || "NULL"}
                   </p>
                   <p className="opacity-50">{`# ${githubUserData.id}`}</p>
                   <p className="text-[0.8rem] text-left">
@@ -87,7 +98,11 @@ export default async function Home() {
               <div>
                 {/** Repositories */}
                 <div className="container mx-auto py-7">
-                  <DataTable columns={columns} data={reposData}/>
+                  {reposData != null ? (
+                    <DataTable columns={columns} data={reposData} />
+                  ) : (
+                    <p>Failed to fetch repositories.</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -101,7 +116,7 @@ export default async function Home() {
               {/* Upper panel */}
               <ResizablePanel defaultSize={25}>
                 <div className="flex h-full items-center justify-center p-6">
-                  <span className="font-semibold">Two</span>
+                  <span className="font-semibold">Work In Progress</span>
                 </div>
               </ResizablePanel>
 
@@ -110,7 +125,7 @@ export default async function Home() {
               {/* Lower panel */}
               <ResizablePanel defaultSize={75}>
                 <div className="flex h-full items-center justify-center p-6">
-                  <span className="font-semibold">Three</span>
+                  <span className="font-semibold">Work In Progress</span>
                 </div>
               </ResizablePanel>
             </ResizablePanelGroup>
@@ -118,51 +133,9 @@ export default async function Home() {
         </ResizablePanelGroup>
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+        <p>
+          This webpage is built with next.js and shadcn.
+        </p>
       </footer>
     </div>
   );

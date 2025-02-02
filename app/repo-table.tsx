@@ -19,9 +19,25 @@ import {
 import { useState } from "react";
 
 export const columns: ColumnDef<GitHubRepoData>[] = [
-    { accessorKey: "id", header: "ID" },
-    { accessorKey: "name", header: "Name" },
-    { accessorKey: "fork", header: "Fork" },
+    {
+        accessorKey: "name", 
+        header: "Name",
+    },
+    { 
+        accessorKey: "fork", 
+        header: "Fork" },
+    {
+        accessorKey: "description",
+        header: "Description",
+        cell: ({row}) => {
+            // const desc = row.getValue("description").slice(0, 30);
+            // return desc;
+            let desc: string = row.getValue("description");
+            const sliceNum = /[\u4E00-\u9FFF]/.test(desc)? 30 : 46;
+            desc = desc?.slice(0, sliceNum);
+            return desc;
+        }
+    },
 ];
 
 interface DataTableProps<TData, TValue> {
@@ -51,7 +67,7 @@ export function DataTable<TData, TValue>({
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         onPaginationChange: setPagination,
-        state:{
+        state: {
             pagination,
         }
     });
