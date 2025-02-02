@@ -1,12 +1,14 @@
-import Image from "next/image";
+// Shadcn
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { columns, DataTable } from "./repo-table";
 
+// React
+import Image from "next/image";
 import Link from "next/link";
 
 const personalInfo = {
@@ -21,9 +23,17 @@ const personalInfo = {
 };
 
 export default async function Home() {
-  const githubInfo = await fetch(
+  const githubUserData: GitHubUserData = await fetch(
     "https://api.github.com/users/YanzhenHuang"
   ).then((res) => res.json());
+
+  const reposData: GitHubRepoData[] = await fetch(githubUserData.repos_url)
+    .then((res) => res.json())
+    .catch((error) => {
+      console.error(`Error fetching repositories: ${error}.`);
+      return null;
+    });
+
   return (
     <div
       className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 
@@ -54,21 +64,31 @@ export default async function Home() {
         >
           {/* Left main panel */}
           <ResizablePanel defaultSize={50}>
-            <div className="flex h-[400px] items-top justify-center p-6">
-              {/* <span className="font-semibold">One</span> */}
+            <div className="flex flex-col h-[400px] items-top justify-center p-6">
+              {/** Github Account Info */}
               <div className="flex flex-row w-full gap-12 items-center">
                 {/** Github Profile */}
                 <div className="flex flex-col justify-left">
-                  <p className="font-bold text-[1.5rem]">{githubInfo.login}</p>
-                  <p className="opacity-50">{`# ${githubInfo.id}`}</p>
-                  <p className="text-[0.8rem] text-left">{githubInfo.bio}</p>
+                  <p className="font-bold text-[1.5rem]">
+                    {githubUserData.login}
+                  </p>
+                  <p className="opacity-50">{`# ${githubUserData.id}`}</p>
+                  <p className="text-[0.8rem] text-left">
+                    {githubUserData.bio}
+                  </p>
                 </div>
 
                 {/* Github Avatar */}
                 <Avatar>
-                  <AvatarImage src={githubInfo.avatar_url} />
+                  <AvatarImage src={githubUserData.avatar_url} />
                   <AvatarFallback>YZ</AvatarFallback>
                 </Avatar>
+              </div>
+              <div>
+                {/** Repositories */}
+                <div className="container mx-auto py-7">
+                  <DataTable columns={columns} data={reposData}/>
+                </div>
               </div>
             </div>
           </ResizablePanel>
