@@ -17,9 +17,14 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { ModeToggle } from "@/components/ui/theme-toggle";
 
 // Icons
-import { GitBranchIcon } from "hugeicons-react";
+import {
+  GitBranchIcon,
+  Mail01Icon,
+  SmartPhone01Icon
+} from "hugeicons-react";
 
 // React
 import Link from "next/link";
@@ -60,8 +65,7 @@ export default async function Home() {
       headers: {
         Authorization: `token ${process.env.GITHUB_TOKEN}`,
       },
-    }
-  )
+    })
     .then((res) => res.json())
     .catch((error) => {
       // console.error(`Error fetching repositories: ${error}.`);
@@ -77,7 +81,6 @@ export default async function Home() {
   })
     .then((res) => res.json())
     .catch((error) => {
-      // console.error(`Error fetching repositories: ${error}.`);
       console.log(error);
       return [];
     });
@@ -101,35 +104,44 @@ export default async function Home() {
   // Hello HKUST!!!!!
   return (
     <div
-      className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 
-                  pb-20 max-sm:p-4 gap-16 font-[family-name:var(--font-geist-sans)]"
-    >
+      className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen px-40 max-sm:p-4 gap-16 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-2 row-start-2 items-center justify-center">
-        {/* Names & Info */}
+        {/* Name, Email, Phone, Avatar */}
         <div className="flex flex-row w-full items-center justify-between mb-6">
           {/* Basic Info */}
           <div>
             <p className="font-bold text-[2rem]">{personalInfo.name}</p>
             <div className="flex min-md:flex-row max-sm:flex-col w-full gap-3">
-              <Link href={`mailto:${personalInfo.email.work[0]}`}>
-                {`Email: ${personalInfo.email.work[0]}`}
+              <Link href={`mailto:${personalInfo.email.work[0]}`} className="flex flex-row items-center gap-1">
+                <Mail01Icon className="w-5 h-5" />
+                {personalInfo.email.work[0]}
               </Link>
-              <p>{`Phone: ${personalInfo.phone[0]}`}</p>
+              <Link href={`mailto:${personalInfo.email.work[0]}`} className="flex flex-row items-center gap-1">
+                {/* <Mail01Icon className="w-5 h-5" /> */}
+                <SmartPhone01Icon className="w-5 h-5" />
+                {personalInfo.phone[0]}
+              </Link>
             </div>
           </div>
 
-          {/*Avatar */}
-          <Avatar>
-            <AvatarImage src="https://s2.loli.net/2025/02/03/kVnMuKbh9OecvZY.png" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
+          <div className="flex flex-row justify-center items-center gap-4">
+
+            <ModeToggle />
+
+            {/*Avatar */}
+            <Avatar>
+              <AvatarImage src="https://s2.loli.net/2025/02/03/kVnMuKbh9OecvZY.png" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+          </div>
         </div>
 
         {/** Panels */}
         <div className="flex gap-2 max-md:flex-col flex-row ">
           {/** Left Panel */}
           <div className="flex flex-col md:w-[50%] sm:w-[100%] gap-2">
-            <Card>
+            {/** Github Status */}
+            <Card className="h-full">
               <CardHeader>
                 <CardTitle>Github Status</CardTitle>
                 <CardDescription>Status of GitHub Account</CardDescription>
@@ -164,13 +176,14 @@ export default async function Home() {
                       opts={{
                         align: "start",
                         loop: true,
-                      }}
-                    >
-                      <CarouselContent className="">
+                      }}>
+                      {/** Repository list carousel */}
+                      <CarouselContent>
                         {reposData.map((repo, id) => (
                           <CarouselItem key={id} className="relative">
                             <Link href={repo.html_url} target="_blank">
-                              <div className="flex flex-col gap-2 p-3 h-full">
+                              <div className="flex flex-col gap-2 p-3 pb-10 h-full">
+                                {/** Repo title */}
                                 <div className="flex flex-row items-center justify-between">
                                   <div className="flex flex-row items-center justify-start gap-2">
                                     <CardTitle className="text-[#0969da]">
@@ -188,29 +201,21 @@ export default async function Home() {
                                     {repo.language}{" "}
                                   </CardDescription>
                                 </div>
-                                {repo.description ? (
-                                  <p>
-                                    {`${repo.description?.slice(
-                                      0,
-                                      /[\u4E00-\u9FFF]/.test(repo.description)
-                                        ? 100
-                                        : 120
-                                    )} ${repo.description?.length >
-                                        (/[\u4E00-\u9FFF]/.test(repo.description)
-                                          ? 100
-                                          : 120)
-                                        ? "..."
-                                        : ""
-                                      }
-                                `}
-                                  </p>
-                                ) : (
-                                  <p className="opacity-50 italic">
-                                    No Description
-                                  </p>
-                                )}
-                                <div className="absolute bottom-2 left-6 bg-white">
-                                  <div className="text-sm py-1 px-2 rounded-full border">
+                                {/** Repo Description */}
+                                <CardDescription>
+                                  {repo.description ? (
+                                    <p>
+                                      {`${repo.description?.slice(0, 100)} ${repo.description?.length > 100 ? "..." : ""}`}
+                                    </p>
+                                  ) : (
+                                    <p className="opacity-50 italic">
+                                      {`No Description`}
+                                    </p>
+                                  )}
+                                </CardDescription>
+                                {/** Repo Visibility */}
+                                <div className="absolute bottom-2 rounded-full border left-6 bg-white dark:bg-gray-900">
+                                  <div className="text-sm py-1 px-2">
                                     {repo.private ? "Private" : "Public"}
                                   </div>
                                 </div>
@@ -254,8 +259,7 @@ export default async function Home() {
                   <Link key={index} href={edu.url} target="_blank">
                     <div
                       className="flex flex-col w-full items-start justify-top p-2 rounded-md 
-                                        hover:bg-gray-100 hover:cursor-pointer transition-all"
-                    >
+                                        hover:bg-gray-100 dark:hover:bg-gray-900 hover:cursor-pointer transition-all">
                       <div className="flex flex-row w-full items-center justify-between">
                         <p className="font-bold text-[1rem]">
                           {edu.institution}
@@ -281,12 +285,12 @@ export default async function Home() {
               <CardDescription>{`Projects I've been working on in organizations.`}</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="flex flex-row w-full gap-2 max-md:flex-col max-md:max-h-[15rem] overflow-scroll">
+              <div className="flex flex-row w-full gap-2 max-md:flex-col max-md:max-h-[15rem] overflow-x-scroll max-md:overflow-y-scroll">
                 {organizationsData?.map((org, id) => (
-                  <div key={id} className="w-full border rounded-md hover:bg-gray-100 transition-all">
-                    <Link 
-                    href={`https://github.com/${org.login}`} 
-                    target="_blank">
+                  <div key={id} className="w-full border rounded-md hover:bg-gray-100 dark:hover:bg-gray-900 transition-all">
+                    <Link
+                      href={`https://github.com/${org.login}`}
+                      target="_blank">
                       <CardHeader className="gap-2">
                         <CardTitle>
                           <div className="flex flex-row gap-2 items-center">
