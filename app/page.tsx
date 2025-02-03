@@ -1,11 +1,14 @@
 // Shadcn
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { columns, DataTable } from "./repo-table";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 
 // React
 import Link from "next/link";
@@ -23,7 +26,7 @@ const personalInfo = {
   education: [
     {
       institution: "University of Macau",
-      url:"https://www.um.edu.mo/",
+      url: "https://www.um.edu.mo/",
       major: "Computer Science",
       degree: "BSc",
       start_date: "Aug 2021",
@@ -88,100 +91,96 @@ export default async function Home() {
           </Avatar>
         </div>
 
-        {/* Stats */}
-        <ResizablePanelGroup
-          direction="horizontal"
-          className="max-w-md min-w-[800px] rounded-lg border"
-        >
-          {/* Left main panel */}
-          <ResizablePanel defaultSize={50}>
-            <div className="flex flex-col h-[500px] items-top justify-start p-6">
-              {/** Github Account Info */}
-              <div className="flex flex-row w-full gap-12 items-center">
-                {/** Github Profile */}
-                <div className="flex flex-col justify-left">
-                  <p className="font-bold text-[1.5rem]">
-                    {githubUserData.login || "NULL"}
-                  </p>
-                  <p className="opacity-50">{`# ${githubUserData.id}`}</p>
-                  <p className="text-[0.8rem] text-left">
-                    {githubUserData.bio}
-                  </p>
-                </div>
-
-                {/* Github Avatar */}
-                <Avatar>
-                  <AvatarImage src={githubUserData.avatar_url} />
-                  <AvatarFallback>YZ</AvatarFallback>
-                </Avatar>
-              </div>
-              <div>
-                {/** Repositories */}
-                <div className="flex flex-row w-full items-center justify-top py-6">
-                    <p className="font-bold text-[1.2rem]">Personal Repos</p>
-                </div>
-                <div className="container mx-auto">
-                  {reposData != null ? (
-                    <DataTable columns={columns} data={reposData} />
-                  ) : (
-                    <p>Failed to fetch repositories.</p>
-                  )}
-                </div>
-              </div>
-            </div>
-          </ResizablePanel>
-
-          <ResizableHandle />
-
-          {/* Right divided panel */}
-          <ResizablePanel>
-            <ResizablePanelGroup direction="vertical">
-              {/* Upper panel */}
-              <ResizablePanel defaultSize={50}>
-                <div className="flex flex-col h-full items-center justify-top p-6">
-                  <div className="flex flex-row w-full items-center justify-top">
-                    <p className="font-bold text-[1.5rem]">Introduction</p>
+        {/** Github stats */}
+        <div className="flex flex-row gap-2">
+          {/** Left Panel */}
+          <div className="flex flex-row w-[50%]">
+            <Card >
+              <CardHeader>
+                <CardTitle>Github Statis</CardTitle>
+                <CardDescription>Status of GitHub Account</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {/** Github Account Info */}
+                <div className="flex flex-row w-full gap-12 items-center">
+                  {/** Github Profile */}
+                  <div className="flex flex-col justify-left">
+                    <p className="font-bold text-[1.5rem]">
+                      {githubUserData.login || "NULL"}
+                    </p>
+                    <p className="opacity-50">{`# ${githubUserData.id}`}</p>
+                    <p className="text-[0.8rem] text-left">
+                      {githubUserData.bio}
+                    </p>
                   </div>
+
+                  {/* Github Avatar */}
+                  <Avatar>
+                    <AvatarImage src={githubUserData.avatar_url} />
+                    <AvatarFallback>YZ</AvatarFallback>
+                  </Avatar>
+                </div>
+
+                {/** Repositories */}
+                <div>
+                  <div className="flex flex-row w-full items-center justify-top py-6">
+                    <p className="font-bold text-[1.2rem]">Personal Repos</p>
+                  </div>
+                  <div className="container mx-auto">
+                    {reposData != null ? (
+                      <DataTable columns={columns} data={reposData} />
+                    ) : (
+                      <p>Failed to fetch repositories.</p>
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/** Right Panel */}
+          <div className="flex flex-col w-[50%] gap-2">
+            {/** Intorduction */}
+            <Card className="h-full">
+              <CardHeader>
+                <CardTitle>Introduction</CardTitle>
+                <CardDescription>Card Description</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-col h-full items-center justify-top">
                   <p className="text-justify">{personalInfo.intro}</p>
                 </div>
-              </ResizablePanel>
+              </CardContent>
+            </Card>
 
-              <ResizableHandle />
-
-              {/* Lower panel */}
-              <ResizablePanel defaultSize={75}>
-                <div className="flex flex-col h-full items-center justify-top p-6">
-                  {/** Title */}
-                  <div className="flex flex-row w-full items-center justify-top">
-                    <p className="font-bold text-[1.5rem]">Education</p>
-                  </div>
-
-                  {/** Content */}
-                  <div className="flex flex-col w-full gap-2">
-                    {personalInfo.education.map((edu, index) => (
-                      <Link key={index} href={edu.url} target="_blank">
-                        <div className="flex flex-col w-full items-start justify-top p-2 rounded-md 
+            {/** Education */}
+            <Card className="h-full">
+              <CardHeader>
+                <CardTitle>Education</CardTitle>
+                <CardDescription>Education History</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {personalInfo.education.map((edu, index) => (
+                  <Link key={index} href={edu.url} target="_blank">
+                    <div className="flex flex-col w-full items-start justify-top p-2 rounded-md 
                                         hover:bg-gray-100 hover:cursor-pointer transition-all">
-                          <div className="flex flex-row w-full items-center justify-between">
-                            <p className="font-bold text-[1rem]">{edu.institution}</p>
-                            <p>{`${edu.start_date} - ${edu.end_date}`}</p>
-                          </div>
-                          <div className="flex flex-row w-full items-center justify-between">
-                            <p>{`${edu.major}, ${edu.degree}`}</p>
-                            <p>{`GPA: ${edu.gpa}`}</p>
-                          </div>
-                        </div>
-                      </Link>
-                    ))}
+                      <div className="flex flex-row w-full items-center justify-between">
+                        <p className="font-bold text-[1rem]">{edu.institution}</p>
+                        <p>{`${edu.start_date} - ${edu.end_date}`}</p>
+                      </div>
+                      <div className="flex flex-row w-full items-center justify-between">
+                        <p>{`${edu.major}, ${edu.degree}`}</p>
+                        <p>{`GPA: ${edu.gpa}`}</p>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </CardContent>
+            </Card>
 
-                  </div>
+          </div>
+        </div>
 
-
-                </div>
-              </ResizablePanel>
-            </ResizablePanelGroup>
-          </ResizablePanel>
-        </ResizablePanelGroup>
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
         <p>This webpage is built with next.js and shadcn.</p>
