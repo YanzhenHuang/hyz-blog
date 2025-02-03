@@ -19,19 +19,23 @@ import {
 } from "@/components/ui/carousel";
 import { ModeToggle } from "@/components/ui/theme-toggle";
 
-// Icons
 import {
-  GitBranchIcon,
-  Mail01Icon,
-  SmartPhone01Icon
-} from "hugeicons-react";
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+
+// Icons
+import { GitBranchIcon, Mail01Icon, SmartPhone01Icon } from "hugeicons-react";
 
 // React
 import Link from "next/link";
+import Image from "next/image";
 
 const personalInfo = {
   name: "Huang Yanzhen",
   birth: "8 Jan 2003",
+  avatar_url: "https://s2.loli.net/2025/02/03/kVnMuKbh9OecvZY.png",
   phone: ["+86 17841574072", "+853 62375735"],
   email: {
     work: ["yanzhenhuangwork@gmail.com"],
@@ -65,7 +69,8 @@ export default async function Home() {
       headers: {
         Authorization: `token ${process.env.GITHUB_TOKEN}`,
       },
-    })
+    }
+  )
     .then((res) => res.json())
     .catch((error) => {
       // console.error(`Error fetching repositories: ${error}.`);
@@ -103,8 +108,7 @@ export default async function Home() {
 
   // Hello HKUST!!!!!
   return (
-    <div
-      className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen px-40 max-sm:p-4 gap-16 font-[family-name:var(--font-geist-sans)]">
+    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen px-40 max-sm:p-4 gap-16 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-2 row-start-2 items-center justify-center">
         {/* Name, Email, Phone, Avatar */}
         <div className="flex flex-row w-full items-center justify-between mb-6">
@@ -112,11 +116,17 @@ export default async function Home() {
           <div>
             <p className="font-bold text-[2rem]">{personalInfo.name}</p>
             <div className="flex min-md:flex-row max-sm:flex-col w-full gap-3">
-              <Link href={`mailto:${personalInfo.email.work[0]}`} className="flex flex-row items-center gap-1">
+              <Link
+                href={`mailto:${personalInfo.email.work[0]}`}
+                className="flex flex-row items-center gap-1"
+              >
                 <Mail01Icon className="w-5 h-5" />
                 {personalInfo.email.work[0]}
               </Link>
-              <Link href={`mailto:${personalInfo.email.work[0]}`} className="flex flex-row items-center gap-1">
+              <Link
+                href={`tel:${personalInfo.email.work[0]}`}
+                className="flex flex-row items-center gap-1"
+              >
                 {/* <Mail01Icon className="w-5 h-5" /> */}
                 <SmartPhone01Icon className="w-5 h-5" />
                 {personalInfo.phone[0]}
@@ -125,14 +135,26 @@ export default async function Home() {
           </div>
 
           <div className="flex flex-row justify-center items-center gap-4">
-
             <ModeToggle />
 
             {/*Avatar */}
-            <Avatar>
-              <AvatarImage src="https://s2.loli.net/2025/02/03/kVnMuKbh9OecvZY.png" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
+            <HoverCard>
+              <HoverCardTrigger>
+                <Avatar className="hover:cursor-pointer">
+                  <AvatarImage src={personalInfo.avatar_url} />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              </HoverCardTrigger>
+              <HoverCardContent className="flex flex-row items-center justify-center">
+                <Image
+                  src={personalInfo.avatar_url}
+                  className="rounded-sm"
+                  alt="avatar"
+                  width={200}
+                  height={200}
+                />
+              </HoverCardContent>
+            </HoverCard>
           </div>
         </div>
 
@@ -176,7 +198,8 @@ export default async function Home() {
                       opts={{
                         align: "start",
                         loop: true,
-                      }}>
+                      }}
+                    >
                       {/** Repository list carousel */}
                       <CarouselContent>
                         {reposData.map((repo, id) => (
@@ -205,7 +228,10 @@ export default async function Home() {
                                 <CardDescription>
                                   {repo.description ? (
                                     <p>
-                                      {`${repo.description?.slice(0, 100)} ${repo.description?.length > 100 ? "..." : ""}`}
+                                      {`${repo.description?.slice(0, 100)} ${repo.description?.length > 100
+                                          ? "..."
+                                          : ""
+                                        }`}
                                     </p>
                                   ) : (
                                     <p className="opacity-50 italic">
@@ -214,7 +240,7 @@ export default async function Home() {
                                   )}
                                 </CardDescription>
                                 {/** Repo Visibility */}
-                                <div className="absolute bottom-2 rounded-full border left-6 bg-white dark:bg-gray-900">
+                                <div className="absolute bottom-2 rounded-full border left-6 bg-white dark:bg-customGray-900">
                                   <div className="text-sm py-1 px-2">
                                     {repo.private ? "Private" : "Public"}
                                   </div>
@@ -259,7 +285,8 @@ export default async function Home() {
                   <Link key={index} href={edu.url} target="_blank">
                     <div
                       className="flex flex-col w-full items-start justify-top p-2 rounded-md 
-                                        hover:bg-gray-100 dark:hover:bg-gray-900 hover:cursor-pointer transition-all">
+                                        hover:bg-customGray-100 dark:hover:bg-customGray-900 hover:cursor-pointer transition-all"
+                    >
                       <div className="flex flex-row w-full items-center justify-between">
                         <p className="font-bold text-[1rem]">
                           {edu.institution}
@@ -282,15 +309,19 @@ export default async function Home() {
           <Card className="w-full">
             <CardHeader>
               <CardTitle>Projects</CardTitle>
-              <CardDescription>{`Projects I've been working on in organizations.`}</CardDescription>
+              <CardDescription>{`Github organization projects`}</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="flex flex-row w-full gap-2 max-md:flex-col max-md:max-h-[15rem] overflow-x-scroll max-md:overflow-y-scroll">
+              <div className="flex flex-row w-full gap-2 max-md:flex-col max-md:max-h-[15rem] max-md:overflow-y-scroll">
                 {organizationsData?.map((org, id) => (
-                  <div key={id} className="w-full border rounded-md hover:bg-gray-100 dark:hover:bg-gray-900 transition-all">
+                  <div
+                    key={id}
+                    className="w-full border rounded-md hover:bg-customGray-100 dark:hover:bg-customGray-900 transition-all"
+                  >
                     <Link
                       href={`https://github.com/${org.login}`}
-                      target="_blank">
+                      target="_blank"
+                    >
                       <CardHeader className="gap-2">
                         <CardTitle>
                           <div className="flex flex-row gap-2 items-center">
@@ -303,9 +334,7 @@ export default async function Home() {
                         </CardTitle>
                         <CardDescription>{org.description}</CardDescription>
                       </CardHeader>
-                      <CardContent>
-
-                      </CardContent>
+                      <CardContent></CardContent>
                     </Link>
                   </div>
                 ))}
