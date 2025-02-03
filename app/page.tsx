@@ -281,15 +281,23 @@ export default async function Home() {
               <CardDescription>{`Projects I've been working on in organizations.`}</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="flex flex-row gap-2">
+              <div className="flex flex-row w-full gap-2 max-md:flex-col max-md:max-h-[15rem] overflow-scroll">
                 {organizationsData?.map((org, id) => (
                   <Card key={id} className="w-full hover:scale-[1.02] transition-all">
                     <Link 
                     href={`https://github.com/${org.login}`} 
                     target="_blank">
 
-                      <CardHeader>
-                        <CardTitle>{org.login}</CardTitle>
+                      <CardHeader className="gap-2">
+                        <CardTitle>
+                          <div className="flex flex-row gap-2 items-center">
+                            <Avatar className="w-8 h-8 rounded-md">
+                              <AvatarImage src={org.avatar_url} />
+                              <AvatarFallback>{org.login}</AvatarFallback>
+                            </Avatar>
+                            <p>{org.login}</p>
+                          </div>
+                        </CardTitle>
                         <CardDescription>{org.description}</CardDescription>
                       </CardHeader>
                       <CardContent>
