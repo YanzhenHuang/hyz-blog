@@ -36,7 +36,10 @@ const personalInfo = {
   name: "Huang Yanzhen",
   birth: "8 Jan 2003",
   avatar_url: "https://s2.loli.net/2025/02/03/kVnMuKbh9OecvZY.png",
-  phone: ["+86 17841574072", "+853 62375735"],
+  phone: [
+    {area:"+86", number:"17841574072"}, 
+    {area:"+853", number:"62375735"}, 
+  ],
   email: {
     work: ["yanzhenhuangwork@gmail.com"],
     home: ["huangyanzhen0108@gmail.com", "huangyanzhen0108@163.com"],
@@ -114,27 +117,25 @@ export default async function Home() {
         <div className="flex flex-row w-full items-center justify-between mb-6">
           {/* Basic Info */}
           <div>
-            <p className="font-bold text-[2rem]">{personalInfo.name}</p>
-            <div className="flex min-md:flex-row max-sm:flex-col w-full gap-3">
+            <p className="font-bold text-[1.9rem]">{personalInfo.name}</p>
+            <div className="flex min-md:flex-row max-sm:flex-col w-full gap-3 text-sm">
               <Link
                 href={`mailto:${personalInfo.email.work[0]}`}
-                className="flex flex-row items-center gap-1"
-              >
-                <Mail01Icon className="w-5 h-5" />
-                {personalInfo.email.work[0]}
+                className="flex flex-row items-center gap-1">
+                <Mail01Icon size={20}/>
+                <p>{personalInfo.email.work[0]}</p>
               </Link>
               <Link
-                href={`tel:${personalInfo.email.work[0]}`}
-                className="flex flex-row items-center gap-1"
-              >
-                {/* <Mail01Icon className="w-5 h-5" /> */}
-                <SmartPhone01Icon className="w-5 h-5" />
-                {personalInfo.phone[0]}
+                href={`tel:${personalInfo.phone[0].area}${personalInfo.phone[0].number}`}
+                className="flex flex-row items-center gap-1">
+                <SmartPhone01Icon size={20}/>
+                <p>{`${personalInfo.phone[0].area} ${personalInfo.phone[0].number}`}</p>
               </Link>
             </div>
           </div>
 
           <div className="flex flex-row justify-center items-center gap-4">
+            {/** Theme Toggle */}
             <ModeToggle />
 
             {/*Avatar */}
@@ -194,7 +195,7 @@ export default async function Home() {
                   <div className="flex flex-col items-center gap-2 justify-center">
                     <CardTitle className="w-full p-1">Personal Repos</CardTitle>
                     <Carousel
-                      className="flex flex-col rounded-md border w-[17.5rem] max-md:w-[15rem] max-sm:w-[14rem]"
+                      className="flex flex-col rounded-md border w-[16rem] max-md:w-[14rem] max-sm:w-[14rem]"
                       opts={{
                         align: "start",
                         loop: true,
