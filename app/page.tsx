@@ -283,11 +283,10 @@ export default async function Home() {
             <CardContent>
               <div className="flex flex-row w-full gap-2 max-md:flex-col max-md:max-h-[15rem] overflow-scroll">
                 {organizationsData?.map((org, id) => (
-                  <Card key={id} className="w-full hover:scale-[1.02] transition-all">
+                  <div key={id} className="w-full border rounded-md hover:bg-gray-100 transition-all">
                     <Link 
                     href={`https://github.com/${org.login}`} 
                     target="_blank">
-
                       <CardHeader className="gap-2">
                         <CardTitle>
                           <div className="flex flex-row gap-2 items-center">
@@ -304,7 +303,7 @@ export default async function Home() {
 
                       </CardContent>
                     </Link>
-                  </Card>
+                  </div>
                 ))}
               </div>
             </CardContent>
