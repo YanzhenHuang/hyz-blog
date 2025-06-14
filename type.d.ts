@@ -135,3 +135,28 @@ interface GitHubOrganizationData {
     avatar_url: string;
     description: string;
 }
+
+interface Education {
+    institution: string;
+    url: string;
+    major: string;
+    degree: string;
+    start_date: string;
+    end_date: string;
+    gpa: string;
+};
+
+interface PersonalInfo {
+    name: string;
+    birth: string;
+    avatar_url: string;
+    phone: { area: string; number: string }[];
+    email: {
+        work: string[];
+        home: string[];
+    };
+    wechat: string;
+    github: string;
+    education: Education[];
+    intro: string;
+};
