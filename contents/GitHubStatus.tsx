@@ -1,3 +1,5 @@
+"use client"
+
 // Shadcn
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
