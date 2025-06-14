@@ -51,13 +51,17 @@ export default async function Home() {
 
   // Hello HKUST!!!!!
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen px-40 max-sm:p-4 gap-16 font-[family-name:var(--font-geist-sans)]">
+    <div className="
+      grid grid-rows-[20px_1fr_20px] 
+      items-center justify-items-center 
+      min-h-screen px-40 max-sm:p-4 gap-16 
+      font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-2 row-start-2 items-center justify-center">
         {/* Name, Email, Phone, Avatar */}
         <PersonalInfo personalInfo={personalInfo} />
 
         {/** Card Panels */}
-        <div className={`flex flex-col gap-2`}>
+        <div className={`flex flex-col gap-2 w-full`}>
           {/** Github Status */}
           <IntroCard cardTitle={`GitHub Status`} cardDescription={`Status of GitHub Account.`}>
             <GitHubStatus githubUserData={githubUserData} reposData={reposData} />

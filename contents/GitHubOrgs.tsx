@@ -22,7 +22,7 @@ const GitHubOrgs = (props: {
     return (
         <div className={`
             flex flex-row w-full gap-2 
-            max-md:flex-col max-md:max-h-[15rem] 
+            max-sm:flex-col max-md:max-h-[15rem] 
             max-md:overflow-y-scroll`}>
             {gitHubOrganizationData?.map((org, id) => (
                 <div
