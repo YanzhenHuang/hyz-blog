@@ -4,20 +4,20 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import {
-  CardDescription,
-  CardTitle,
+    CardDescription,
+    CardTitle,
 } from "@/components/ui/card";
 
 import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
 } from "@/components/ui/carousel";
 
 // Icons
-import { GitBranchIcon, Mail01Icon, SmartPhone01Icon } from "hugeicons-react";
+import { GitBranchIcon } from "hugeicons-react";
 
 // React
 import Link from "next/link";
@@ -32,7 +32,7 @@ const GitHubStatus = (props: {
             {/** Github Account Info */}
             <div className="flex flex-row w-full gap-12 items-center">
                 {/** Github Profile */}
-                <div className="flex flex-col justify-left">
+                <div className="flex flex-col gap-1 justify-left">
                     <p className="font-bold text-[1.5rem]">
                         {githubUserData.login || "NULL"}
                     </p>
@@ -43,10 +43,12 @@ const GitHubStatus = (props: {
                 </div>
 
                 {/* Github Avatar */}
+                <Link href={`https://www.github.com/YanzhenHuang`} target="_blank">
                 <Avatar>
                     <AvatarImage src={githubUserData.avatar_url} />
                     <AvatarFallback>YZ</AvatarFallback>
                 </Avatar>
+                </Link>
             </div>
 
             {/** Repositories */}

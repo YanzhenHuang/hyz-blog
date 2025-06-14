@@ -4,6 +4,7 @@ import GitHubStatus from "@/contents/GitHubStatus";
 import Education from "@/contents/Education";
 import GitHubOrgs from "@/contents/GitHubOrgs";
 import PersonalInfo from "@/contents/PersonalInfo";
+import Prizes from "@/contents/Prizes";
 
 export default async function Home() {
   // User data
@@ -63,7 +64,9 @@ export default async function Home() {
         {/** Card Panels */}
         <div className={`flex flex-col gap-2 w-full`}>
           {/** Github Status */}
-          <IntroCard cardTitle={`GitHub Status`} cardDescription={`Status of GitHub Account.`}>
+          <IntroCard 
+            cardTitle={`GitHub Status`} 
+            cardDescription={`A brief overview of my GitHub profile.`}>
             <GitHubStatus githubUserData={githubUserData} reposData={reposData} />
           </IntroCard>
 
@@ -75,12 +78,19 @@ export default async function Home() {
           </IntroCard>
 
           {/** Education */}
-          <IntroCard cardTitle={`Education`} cardDescription={`Education History`}>
+          <IntroCard cardTitle={`Education`} cardDescription={`My education history.`}>
             <Education education={personalInfo.education} />
           </IntroCard>
 
+          {/** Prizes */}
+          <IntroCard cardTitle={`Prizes`} cardDescription={`List of prizes and awards I obtained.`}>
+            <Prizes prizes={personalInfo.prizes} />
+          </IntroCard>
+
           {/** Projects */}
-          <IntroCard cardTitle={`Projects`} cardDescription={`List of projects.`}>
+          <IntroCard 
+            cardTitle={`Projects`} 
+            cardDescription={`List of projects I'm currently working with/maintained before.`}>
             <GitHubOrgs gitHubOrganizationData={organizationsData} />
           </IntroCard>
         </div>

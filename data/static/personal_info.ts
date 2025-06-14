@@ -1,5 +1,5 @@
 
-export const personalInfo = {
+export const personalInfo: PersonalInfo = {
     name: "Huang Yanzhen",
     birth: "8 Jan 2003",
     avatar_url: "https://s2.loli.net/2025/02/03/kVnMuKbh9OecvZY.png",
@@ -13,6 +13,28 @@ export const personalInfo = {
     },
     wechat: "one_of_a_goat",
     github: "YanzhenHuang",
+    prizes: [
+        {
+            title: {
+                CN: "電腦及資訊科學系最優秀獎（2024/2025）",
+                EN: "The Best of Department of Computer and Information Science (2024/2025)"
+            },
+            about: "畢業設計",
+            date: "2025/05/23",
+            issuer: "澳門大學科技學院 | UM FST",
+            link: "https://www.cis.um.edu.mo/bestfyp.html",
+        },
+        {
+            title: {
+                CN: "科技學院畢業設計院長榮譽榜（2024/2025）",
+                EN: "UM FST Final Year Project Dean's Honor's List (2024/2025)"
+            },
+            about: "畢業設計",
+            date: "2025/05/23",
+            issuer: "澳門大學科技學院 | UM FST",
+            link: "https://www.cis.um.edu.mo/bestfyp.html",
+        }
+    ],
     education: [
         {
             institution: "University of Macau",

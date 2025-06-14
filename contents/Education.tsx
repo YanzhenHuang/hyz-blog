@@ -18,26 +18,27 @@ const Education = (props: {
                                 hover:bg-customGray-100 
                                 dark:hover:bg-customGray-900 
                                 hover:cursor-pointer transition-all`}>
-                                    
-                            {/** First Row: Institution name + Date */}
+                            
                             <div className={`
                                 flex flex-row w-full
                                 items-center justify-between`}>
-                                <p className="font-bold text-[1rem] w-3/4">
-                                    {edu.institution}
-                                </p>
-                                <p className={`text-right`}>
-                                    {`${edu.start_date} - ${edu.end_date}`}
-                                </p>
-                            </div>
+                                    {/** Left part: Institution Name + Major + Degree*/}
+                                    <div className={`flex flex-col w-1/2`}>
+                                        <p className="font-bold text-[1rem]">
+                                            {edu.institution}
+                                        </p>
+                                        <p className="text-sm">
+                                            {`${edu.major}, ${edu.degree}`}
+                                        </p>
+                                    </div>
 
-                            {/** Second Row: Major name + GPA */}
-                            <div className={`
-                                flex flex-row w-full
-                                items-center justify-between`}>
-                                <p>{`${edu.major}, ${edu.degree}`}</p>
-                                <p>{`GPA: ${edu.gpa}`}</p>
+                                    {/** Right part: Time, GPA */}
+                                    <div className={`flex flex-col text-right text-sm`}>
+                                        <p>{`${edu.start_date} - ${edu.end_date}`}</p>
+                                        <p>{`GPA: ${edu.gpa}`}</p>
+                                    </div>
                             </div>
+                                
                         </div>
                     </Link>
                 ))

@@ -146,6 +146,17 @@ interface Education {
     gpa: string;
 };
 
+interface Prize {
+    title: {
+        CN: string,
+        EN: string
+    },
+    about: string,
+    date: string,
+    issuer: string,
+    link: string
+}
+
 interface PersonalInfo {
     name: string;
     birth: string;
@@ -157,6 +168,7 @@ interface PersonalInfo {
     };
     wechat: string;
     github: string;
+    prizes: Prize[];
     education: Education[];
     intro: string;
 };
