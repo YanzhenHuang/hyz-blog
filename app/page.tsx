@@ -55,14 +55,14 @@ export default async function Home() {
     <div className="
       grid grid-rows-[20px_1fr_20px] 
       items-center justify-items-center 
-      min-h-screen px-40 max-sm:p-4 gap-16 
+      min-h-screen max-sm:p-4 gap-16 
       font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-2 row-start-2 items-center justify-center">
         {/* Name, Email, Phone, Avatar */}
         <PersonalInfo personalInfo={personalInfo} />
 
         {/** Card Panels */}
-        <div className={`flex flex-col gap-2 w-full`}>
+        <div className={`flex flex-col gap-2 w-full max-w-[800px]`}>
           {/** Github Status */}
           <IntroCard 
             cardTitle={`GitHub Status`} 
