@@ -178,7 +178,7 @@ interface PersonalInfo {
  */
 
 interface LLMEventBase {
-    conversastion_id: string;  
+    conversation_id: string;  
     message_id: string;
     created_at: number;
     task_id: string;
@@ -213,6 +213,7 @@ type FrontendMessageTypes = 'text' | 'process';
 interface FrontendMessageBase {
     type: FrontendMessageTypes;
     message: string;
+    conversation_id: string;
 }
 
 interface FrontendMessageText extends FrontendMessageBase {
