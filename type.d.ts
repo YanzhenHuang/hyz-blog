@@ -172,3 +172,59 @@ interface PersonalInfo {
     education: Education[];
     intro: string;
 };
+
+/**
+ * LLM-Related
+ */
+
+interface LLMEventBase {
+    conversastion_id: string;  
+    message_id: string;
+    created_at: number;
+    task_id: string;
+};
+
+interface LLMNodeStarted extends LLMEventBase{
+    event: 'node_started';
+    workflow_run_id: string;
+    data: {
+        id: string;
+        node_id: string;
+        node_type: string;
+        title: string;
+        index: string;
+        created_at: number;
+    } & any;
+};
+
+interface LLMMessage extends LLMEventBase {
+    event: 'message';
+    id: string;
+    answer: string;
+    from_variable_selector: string[];
+}
+
+type LLMEvents = LLMNodeStarted | LLMMessage;
+
+/** Frontend */
+
+type FrontendMessageTypes = 'text' | 'process';
+
+interface FrontendMessageBase {
+    type: FrontendMessageTypes;
+    message: string;
+}
+
+interface FrontendMessageText extends FrontendMessageBase {
+    type: 'text';
+}
+
+interface FrontendMessageProcess extends FrontendMessageBase {
+    type: 'process';
+}
+
+interface FrontendMessageError extends FrontendMessageBase {
+    type: 'error';
+}
+
+type FrontendMessages = FrontendMessageText | FrontendMessageProcess | FrontendMessageError;
