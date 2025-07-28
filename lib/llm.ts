@@ -1,5 +1,3 @@
-import fetch from "node-fetch";
-
 /**
  * Checks if the backend server is usable.
  * @returns Whether the server is alive or not.
@@ -47,7 +45,7 @@ const transcribeLLMEvents = (llmEvent: LLMEvents): FrontendMessages => {
  * @param callbacks Callback functions when message received, stream ended and error.
  * @returns void.
  */
-async function chat(
+export async function chat(
     query: string,
     conversation_id: string = '',
     callbacks: {
@@ -58,83 +56,71 @@ async function chat(
 ) {
     const { yieldMessage, onEnd, onError } = callbacks;
 
-    // Request and receive stream obj.
-    const res_hyz = await fetch("http://localhost:3000/chat", {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            query,
-            conversation_id,
-        }),
-    });
+    try {
+        // Request and receive stream obj.
+        const res_hyz = await fetch("http://localhost:3000/chat", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query,
+                conversation_id,
+            }),
+        });
 
-    if (!res_hyz) {
-        onError(new Error('Request failed!'));
-        return;
-    }
+        if (!res_hyz.ok) {
+            onError(new Error('Request failed!'));
+            return;
+        }
 
-    const stream = res_hyz.body;
-    if (!stream) {
-        onError(new Error('Request failed!'));
-        return;
-    }
+        const reader = res_hyz.body?.getReader();
+        if (!reader) {
+            onError(new Error('No response body!'));
+            return;
+        }
 
-    // Process stream obj and yield from time to time.
-    const decoder = new TextDecoder('utf-8');
-    let textBuffer = '';
+        // Process stream obj and yield from time to time.
+        const decoder = new TextDecoder('utf-8');
+        let textBuffer = '';
 
-    stream.on('data', (chunk) => {
-        const chunkPlainText = decoder.decode(chunk, { stream: true });
-
-        if (chunkPlainText.startsWith('data: ')) {
-            try {
-                const llmEventJson = JSON.parse(chunkPlainText.slice('data: '.length));
-                const frontendMessage = transcribeLLMEvents(llmEventJson);
-                yieldMessage(frontendMessage);
-            } catch (e) {
-                if (!(e instanceof SyntaxError)) {
-                    throw e;
-                }
-                textBuffer = chunkPlainText;
+        while (true) {
+            const { done, value } = await reader.read();
+            
+            if (done) {
+                onEnd();
+                break;
             }
-        } else {
-            textBuffer += chunkPlainText;
-            try {
-                const llmEventJson = JSON.parse(textBuffer);
-                const frontendMessage = transcribeLLMEvents(llmEventJson);
-                yieldMessage(frontendMessage);
-            } catch (e) {
-                if (!(e instanceof SyntaxError)) {
-                    throw e;
+
+            const chunkPlainText = decoder.decode(value, { stream: true });
+
+            if (chunkPlainText.startsWith('data: ')) {
+                try {
+                    const llmEventJson = JSON.parse(chunkPlainText.slice('data: '.length));
+                    const frontendMessage = transcribeLLMEvents(llmEventJson);
+                    yieldMessage(frontendMessage);
+                } catch (e) {
+                    if (!(e instanceof SyntaxError)) {
+                        throw e;
+                    }
+                    textBuffer = chunkPlainText;
+                }
+            } else {
+                textBuffer += chunkPlainText;
+                try {
+                    const llmEventJson = JSON.parse(textBuffer);
+                    const frontendMessage = transcribeLLMEvents(llmEventJson);
+                    yieldMessage(frontendMessage);
+                    textBuffer = '';
+                } catch (e) {
+                    if (!(e instanceof SyntaxError)) {
+                        throw e;
+                    }
                 }
             }
         }
-    });
-
-    stream.on('end', onEnd);
-
-    stream.on('error', () => {
-        console.log({
-            type: 'error',
-            message: '由于网络波动，未能处理您的请求！'
-        })
-    });
-
+    } catch (error) {
+        onError(error);
+        console.error(error);
+    }
 }
-
-// chat(
-//     '请用列表列举一下你的技能。',
-//     '',
-//     {
-//         yieldMessage: (msg: FrontendMessages) => {
-//             console.log(msg);
-//         },
-//         onEnd: () => {
-//             console.log('end');
-//         },
-//         onError: (error: Error) => {
-//             console.log(error);
-//         }
-//     });

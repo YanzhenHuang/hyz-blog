@@ -66,7 +66,7 @@ export default async function Home() {
         <div className={`flex flex-col gap-2 w-full max-w-[800px]`}>
           <IntroCard 
             cardTitle={`My LLM Agent`} 
-            cardDescription={`A simple LLM agent using Qwen model`}>
+            cardDescription={`跟我的代理LLM聊聊天，简单掌握我的讯息！`}>
               <LLM/>
           </IntroCard>
 

@@ -70,3 +70,24 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Minimize Scrollbar */
+.simplified-scrollbar {
+  overflow: auto;
+  scrollbar-width: thin;             /* Firefox */
+  scrollbar-color: rgba(128,128,128,0.2) transparent;
+}
+
+.simplified-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.simplified-scrollbar::-webkit-scrollbar {
+  background: transparent;
+}
+
+.simplified-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.2); /* 半透明 */
+  border-radius: 4px;
+}
