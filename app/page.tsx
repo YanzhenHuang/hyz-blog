@@ -5,6 +5,7 @@ import Education from "@/contents/Education";
 import GitHubOrgs from "@/contents/GitHubOrgs";
 import PersonalInfo from "@/contents/PersonalInfo";
 import Prizes from "@/contents/Prizes";
+import LLM from "@/contents/LLM";
 
 export default async function Home() {
   // User data
@@ -63,9 +64,15 @@ export default async function Home() {
 
         {/** Card Panels */}
         <div className={`flex flex-col gap-2 w-full max-w-[800px]`}>
-          {/** Github Status */}
           <IntroCard 
-            cardTitle={`GitHub Status`} 
+            cardTitle={`My LLM Agent`} 
+            cardDescription={`A simple LLM agent using Qwen model`}>
+              <LLM/>
+          </IntroCard>
+
+          {/** Github Status */}
+          <IntroCard
+            cardTitle={`GitHub Status`}
             cardDescription={`A brief overview of my GitHub profile.`}>
             <GitHubStatus githubUserData={githubUserData} reposData={reposData} />
           </IntroCard>
@@ -88,8 +95,8 @@ export default async function Home() {
           </IntroCard>
 
           {/** Projects */}
-          <IntroCard 
-            cardTitle={`Projects`} 
+          <IntroCard
+            cardTitle={`Projects`}
             cardDescription={`List of projects I'm currently working with/maintained before.`}>
             <GitHubOrgs gitHubOrganizationData={organizationsData} />
           </IntroCard>

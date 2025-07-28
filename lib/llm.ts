@@ -124,17 +124,17 @@ async function chat(
 
 }
 
-chat(
-    '简单讲一下你的项目吧。',
-    '407b980c-4dc0-4c30-afa7-a4fd68a69b0e',
-    {
-        yieldMessage: (msg: FrontendMessages) => {
-            console.log(msg);
-        },
-        onEnd: () => {
-            console.log('end');
-        },
-        onError: (error: Error) => {
-            console.log(error);
-        }
-    });
+// chat(
+//     '请用列表列举一下你的技能。',
+//     '',
+//     {
+//         yieldMessage: (msg: FrontendMessages) => {
+//             console.log(msg);
+//         },
+//         onEnd: () => {
+//             console.log('end');
+//         },
+//         onError: (error: Error) => {
+//             console.log(error);
+//         }
+//     });
