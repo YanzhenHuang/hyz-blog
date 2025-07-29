@@ -30,7 +30,7 @@ const GitHubStatus = (props: {
     return (
         <div className="flex flex-col gap-2">
             {/** Github Account Info */}
-            <div className="flex flex-row w-full gap-12 items-center">
+            <div className="flex flex-row w-full gap-12 items-center justify-between">
                 {/** Github Profile */}
                 <div className="flex flex-col gap-1 justify-left">
                     <p className="font-bold text-[1.5rem]">

@@ -1,9 +1,11 @@
 "use client"
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import exp from "constants";
-import { createRef, useState } from "react";
+import { createRef, useEffect, useState } from "react";
 import { chat } from "@/lib/llm";
+import { useToast } from "@/hooks/use-toast"
+import { ToastAction } from "@/components/ui/toast"
+import { scrollToBottom } from "@/lib/ui-tools";
 
 export type Chat = {
     content: string,
@@ -21,26 +23,41 @@ export default function LLM() {
     const [respondStatus, setRespondStatus] = useState<number>(0);
 
     const textAreaRef = createRef<HTMLTextAreaElement>();
-    const [textAreaContent, setTextAreaContent] = useState<string | undefined>(void 0);
+    const scrollContainerRef = createRef<HTMLDivElement>();
 
+    const { toast } = useToast();
+
+    useEffect(() => {
+        if (!scrollContainerRef.current)
+            return;
+        scrollToBottom(scrollContainerRef);
+    }, [chatList])
 
     return (
         <div className={`flex flex-col gap-2 w-full`}>
             <div className={`
                 flex flex-col w-full h-80
+                border border-[#00000055] dark:border-[#ffffff22] rounded-md 
+                
                 `}>
-                <div className={`
+                <div
+                    ref={scrollContainerRef}
+                    className={`
                     flex flex-col w-full gap-3
                     overflow-y-auto simplified-scrollbar`}>
-                    {chatList.map(chat => (
+                    {chatList.map((chat, i) => (
                         <div>
-                            <p className={`
+                            <span className={`
                             flex flex-row text-justify ml-auto
                             ${chat.role == 'user' ? 'w-1/2' : 'w-full'} 
                             ${chat.role == 'user' && 'bg-[#1e1e1e55]'}
                             px-5 py-2 rounded-lg`}>
-                                {chat.content}
-                            </p>
+                                {`${chat.content}${(
+                                    i == chatList.length - 1 &&
+                                    chat.role == 'assistant' &&
+                                    respondStatus == 2) ?
+                                    '⬤' : ''}`}
+                            </span>
                         </div>
                     ))}
                 </div>
@@ -55,26 +72,31 @@ export default function LLM() {
                     ref={textAreaRef}
                     placeholder={respondStatus ? '请等待LLM回答结束^ω^' : `请问问题~`}
                     className={`resize-none`}
-                    disabled={respondStatus > 0}
-                    onChange={(e) => setTextAreaContent(e.target.value)} />
+                    disabled={respondStatus > 0} />
                 <Button onClick={() => {
-                    setRespondStatus(1);
-                    if (!textAreaContent)
+                    if (!textAreaRef.current?.value) {
+                        toast({
+                            title: '请至少输入一个文字~',
+                            description: '欲要成其事，必先利其器',
+                            action: (
+                                <ToastAction altText="知道了">知道了</ToastAction>
+                            ),
+                        });
                         return;
-                    setChatList(list => [...list, { role: 'user', content: query }, { role: 'assistant', content: '' }])
-                    const query = textAreaContent;
-
-                    setTextAreaContent(void 0);
-
-                    if (textAreaRef.current) {
-                        textAreaRef.current.value = '';
                     }
 
+                    setRespondStatus(1);
+                    const query = textAreaRef.current.value;
+                    setChatList(list => [...list, { role: 'user', content: query }, { role: 'assistant', content: '' }])
+
+                    textAreaRef.current.value = '';
+
                     let receivedContent = '';
+
                     chat(query, '', {
                         yieldMessage: (msg: FrontendMessages) => {
                             console.log(msg);
-                            if (msg.type == 'process') {
+                            if (msg.type != 'process') {
                                 setRespondStatus(2);
                             }
 
@@ -95,7 +117,16 @@ export default function LLM() {
                             setRespondStatus(0);
                         },
                         onError: (error) => {
-                            console.log(error);
+                            setRespondStatus(0);
+                            toast({
+                                title: '哎呀，有点小错误！',
+                                description: '可能是服务器开小差啦，等会再问呗QAQ',
+                                action: (
+                                    <ToastAction altText="知道了">知道了</ToastAction>
+                                ),
+                            });
+                            console.log('嘿嘿，我就知道你会点进来看~ 呐，下面就是错误，别笑我哦↓');
+                            console.error(error);
                         }
                     });
                 }}>发送

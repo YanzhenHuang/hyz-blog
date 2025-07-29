@@ -66,7 +66,11 @@ export default async function Home() {
         <div className={`flex flex-col gap-2 w-full max-w-[800px]`}>
           <IntroCard 
             cardTitle={`My LLM Agent`} 
-            cardDescription={`跟我的代理LLM聊聊天，简单掌握我的讯息！`}>
+            cardDescription={`跟我的代理LLM聊聊天，简单掌握我的讯息`}
+            hoverCardProps={{
+              description: `Powered by Dify + Qwen-Max, using RAG.`,
+              date: `2025/07/29`
+            }}>
               <LLM/>
           </IntroCard>
 
