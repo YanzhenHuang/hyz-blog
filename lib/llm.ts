@@ -5,7 +5,7 @@
 const checkAlive = async (): Promise<boolean> => {
     try {
         const res = await fetch(
-            'http://localhost:3000/are-you-still-there', 
+            'http://localhost:7016/are-you-still-there',
             { method: 'GET' });
         return res.ok;
     } catch (e) {
@@ -58,16 +58,19 @@ export async function chat(
 
     try {
         // Request and receive stream obj.
-        const res_hyz = await fetch("http://localhost:3000/chat", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                query,
-                conversation_id,
-            }),
-        });
+        const res_hyz = await fetch(
+            "https://www.huangyanzhen-backend.dev/chat",
+            // "http://localhost:7016/chat",
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    query,
+                    conversation_id,
+                }),
+            });
 
         if (!res_hyz.ok) {
             onError(new Error('Request failed!'));
@@ -86,8 +89,9 @@ export async function chat(
 
         while (true) {
             const { done, value } = await reader.read();
-            
+
             if (done) {
+                console.log('Ended');
                 onEnd();
                 break;
             }
