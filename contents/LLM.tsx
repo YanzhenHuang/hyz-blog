@@ -17,7 +17,7 @@ export default function LLM() {
         {
             'role': 'assistant',
             'content': '我是黄彦祯的代理LLM，请问我你想问的问题！'
-        }
+        },
     ]);
 
     const [respondStatus, setRespondStatus] = useState<number>(0);
@@ -31,7 +31,7 @@ export default function LLM() {
         if (!scrollContainerRef.current)
             return;
         scrollToBottom(scrollContainerRef);
-    }, [chatList])
+    }, [chatList, scrollContainerRef])
 
     return (
         <div className={`flex flex-col gap-2 w-full`}>
@@ -43,23 +43,56 @@ export default function LLM() {
                 <div
                     ref={scrollContainerRef}
                     className={`
-                    flex flex-col w-full gap-3
+                    flex flex-col w-full gap-3 px-5 py-2
                     overflow-y-auto simplified-scrollbar`}>
-                    {chatList.map((chat, i) => (
-                        <div>
-                            <span className={`
-                            flex flex-row text-justify ml-auto
-                            ${chat.role == 'user' ? 'w-1/2' : 'w-full'} 
-                            ${chat.role == 'user' && 'bg-[#1e1e1e55]'}
-                            px-5 py-2 rounded-lg`}>
-                                {`${chat.content}${(
-                                    i == chatList.length - 1 &&
-                                    chat.role == 'assistant' &&
-                                    respondStatus == 2) ?
-                                    '⬤' : ''}`}
-                            </span>
-                        </div>
-                    ))}
+                    {chatList.map((chat, i) => {
+                        switch (chat.role) {
+                            case 'assistant':
+                                return (
+                                    <div key={i}>
+                                        <span className={`
+                                            flex flex-row text-justify ml-auto
+                                            w-full`}>
+                                            {`${chat.content}${(
+                                                i == chatList.length - 1 &&
+                                                respondStatus == 2) ?
+                                                '⬤' : ''}`}
+                                        </span>
+                                    </div>
+                                );
+                            case 'user':
+                                return (
+                                    <div key={i}>
+                                        <span className={`
+                                            flex flex-row text-justify ml-auto
+                                            bg-[#dedede] dark:bg-[#fefefe]
+                                            rounded-lg w-full max-w-fit
+                                            px-5 py-2`}>
+                                            {`${chat.content}${(
+                                                i == chatList.length - 1 &&
+                                                respondStatus == 2) ?
+                                                '⬤' : ''}`}
+                                        </span>
+                                    </div>
+                                );
+                        }
+                    }
+                        // (
+                        //     <div key={i}>
+                        //         <span className={`
+                        //         flex flex-row text-justify ml-auto
+                        //         ${chat.role == 'user' ? 'w-1/2' : 'w-full'} 
+                        //         ${chat.role == 'user' && 'bg-[#1e1e1e55]'}
+                        //         px-5 py-2 rounded-lg`}>
+                        //             {`${chat.content}${(
+                        //                 i == chatList.length - 1 &&
+                        //                 chat.role == 'assistant' &&
+                        //                 respondStatus == 2) ?
+                        //                 '⬤' : ''}`}
+                        //         </span>
+                        //     </div>
+                        // )
+                    )}
                 </div>
                 {respondStatus == 1 && (
                     <div className={`flex flex-row px-5 italic opacity-50`}>

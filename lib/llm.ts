@@ -1,17 +1,17 @@
-/**
- * Checks if the backend server is usable.
- * @returns Whether the server is alive or not.
- */
-const checkAlive = async (): Promise<boolean> => {
-    try {
-        const res = await fetch(
-            'http://localhost:7016/are-you-still-there',
-            { method: 'GET' });
-        return res.ok;
-    } catch (e) {
-        return false;
-    }
-};
+// /**
+//  * Checks if the backend server is usable.
+//  * @returns Whether the server is alive or not.
+//  */
+// const checkAlive = async (): Promise<boolean> => {
+//     try {
+//         const res = await fetch(
+//             'http://localhost:7016/are-you-still-there',
+//             { method: 'GET' });
+//         return res.ok;
+//     } catch (e) {
+//         return false;
+//     }
+// };
 
 /**
  * Transcribe an LLM event to a frontend message.
@@ -51,7 +51,7 @@ export async function chat(
     callbacks: {
         yieldMessage: (llmEvent: FrontendMessages) => void,
         onEnd: () => void,
-        onError: (error: any) => void
+        onError: (error: unknown) => void
     },
 ) {
     const { yieldMessage, onEnd, onError } = callbacks;
@@ -59,8 +59,8 @@ export async function chat(
     try {
         // Request and receive stream obj.
         const res_hyz = await fetch(
-            "https://www.huangyanzhen-backend.dev/chat",
-            // "http://localhost:7016/chat",
+            // "https://www.huangyanzhen-backend.dev/chat",
+            "http://localhost:7016/chat",
             {
                 method: 'POST',
                 headers: {
@@ -73,6 +73,7 @@ export async function chat(
             });
 
         if (!res_hyz.ok) {
+            console.log(res_hyz);
             onError(new Error('Request failed!'));
             return;
         }
