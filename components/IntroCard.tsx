@@ -6,7 +6,6 @@ import {
     HoverCardContent,
     HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { InfoIcon } from "lucide-react";
 
 
 const IntroCard = (props: {
