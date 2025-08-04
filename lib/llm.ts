@@ -34,7 +34,9 @@ const transcribeLLMEvents = (llmEvent: LLMEvents): FrontendMessages => {
             break;
     }
 
-    return { type, message, conversation_id };
+    const frontendMessage = { type, message, conversation_id };
+    console.log(`message: ${message}`);
+    return frontendMessage;
 }
 
 /**
@@ -59,8 +61,8 @@ export async function chat(
     try {
         // Request and receive stream obj.
         const res_hyz = await fetch(
-            // "https://www.huangyanzhen-backend.dev/chat",
-            "http://localhost:7016/chat",
+            "https://www.huangyanzhen-backend.dev/chat",
+            // "http://localhost:7016/chat",
             {
                 method: 'POST',
                 headers: {
@@ -84,46 +86,42 @@ export async function chat(
             return;
         }
 
-        // Process stream obj and yield from time to time.
         const decoder = new TextDecoder('utf-8');
-        let textBuffer = '';
+        let buffer = '';
 
         while (true) {
             const { done, value } = await reader.read();
-
             if (done) {
                 console.log('Ended');
                 onEnd();
                 break;
             }
 
-            const chunkPlainText = decoder.decode(value, { stream: true });
+            buffer += decoder.decode(value, { stream: true });
 
-            if (chunkPlainText.startsWith('data: ')) {
-                try {
-                    const llmEventJson = JSON.parse(chunkPlainText.slice('data: '.length));
-                    const frontendMessage = transcribeLLMEvents(llmEventJson);
-                    yieldMessage(frontendMessage);
-                } catch (e) {
-                    if (!(e instanceof SyntaxError)) {
-                        throw e;
+            // 按行切分
+            const lines = buffer.split('\n');
+            buffer = lines.pop() || ''; // 最后一行可能是不完整的，留在 buffer
+
+            for (const line of lines) {
+                if (line.startsWith('data: ')) {
+                    const jsonStr = line.slice('data: '.length).trim();
+                    if (jsonStr === '[DONE]') {
+                        console.log('Stream finished');
+                        onEnd();
+                        return;
                     }
-                    textBuffer = chunkPlainText;
-                }
-            } else {
-                textBuffer += chunkPlainText;
-                try {
-                    const llmEventJson = JSON.parse(textBuffer);
-                    const frontendMessage = transcribeLLMEvents(llmEventJson);
-                    yieldMessage(frontendMessage);
-                    textBuffer = '';
-                } catch (e) {
-                    if (!(e instanceof SyntaxError)) {
-                        throw e;
+                    try {
+                        const llmEventJson = JSON.parse(jsonStr);
+                        const frontendMessage = transcribeLLMEvents(llmEventJson);
+                        yieldMessage(frontendMessage);
+                    } catch (e) {
+                        console.error('JSON parse error', e, jsonStr);
                     }
                 }
             }
         }
+
     } catch (error) {
         onError(error);
         console.error(error);
