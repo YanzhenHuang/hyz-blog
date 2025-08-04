@@ -1,6 +1,7 @@
 
 export const personalInfo: PersonalInfo = {
-    name: "Huang Yanzhen",
+    name: "黄彦祯",
+    name_en: " Huang Yanzhen",
     birth: "8 Jan 2003",
     avatar_url: "https://s2.loli.net/2025/02/03/kVnMuKbh9OecvZY.png",
     phone: [

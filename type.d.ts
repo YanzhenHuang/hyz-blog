@@ -159,6 +159,7 @@ interface Prize {
 
 interface PersonalInfo {
     name: string;
+    name_en: string;
     birth: string;
     avatar_url: string;
     phone: { area: string; number: string }[];

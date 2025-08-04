@@ -34,9 +34,7 @@ const transcribeLLMEvents = (llmEvent: LLMEvents): FrontendMessages => {
             break;
     }
 
-    const frontendMessage = { type, message, conversation_id };
-    console.log(`message: ${message}`);
-    return frontendMessage;
+    return { type, message, conversation_id };
 }
 
 /**
@@ -88,6 +86,7 @@ export async function chat(
 
         const decoder = new TextDecoder('utf-8');
         let buffer = '';
+        // let timerId = setTimeout(onEnd, 15 * 1000); // 30s 内无消息就停。
 
         while (true) {
             const { done, value } = await reader.read();
@@ -96,6 +95,8 @@ export async function chat(
                 onEnd();
                 break;
             }
+
+            // clearTimeout(timerId);
 
             buffer += decoder.decode(value, { stream: true });
 
@@ -121,7 +122,6 @@ export async function chat(
                 }
             }
         }
-
     } catch (error) {
         onError(error);
         console.error(error);

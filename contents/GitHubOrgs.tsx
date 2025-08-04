@@ -22,13 +22,14 @@ const GitHubOrgs = (props: {
     return (
         <div className={`
             flex flex-row w-full gap-2 
+            overflow-x-auto
             max-sm:flex-col max-md:max-h-[15rem] 
-            max-md:overflow-y-scroll`}>
+            max-md:overflow-y-auto`}>
             {gitHubOrganizationData?.map((org, id) => (
                 <div
                     key={id}
                     className={`
-                        w-full border rounded-md 
+                        w-64 max-sm:w-full shrink-0 border rounded-md max-h-48
                         hover:bg-customGray-100 dark:hover:bg-customGray-900 
                         transition-all`}>
                     <Link
@@ -44,7 +45,7 @@ const GitHubOrgs = (props: {
                                     <p>{org.login}</p>
                                 </div>
                             </CardTitle>
-                            <CardDescription>{org.description}</CardDescription>
+                            <CardDescription className={`line-clamp-3`}>{org.description}</CardDescription>
                         </CardHeader>
                         <CardContent></CardContent>
                     </Link>

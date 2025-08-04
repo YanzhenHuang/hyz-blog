@@ -26,8 +26,11 @@ const PersonalInfo = (props: {
             flex flex-row w-full 
             items-center justify-between mb-6`}>
             {/* Basic Info */}
-            <div>
-                <p className="font-bold text-[1.9rem]">{personalInfo.name}</p>
+            <div className={`flex flex-col gap-2`}>
+                <div className={`flex flex-row gap-2 items-baseline max-sm:flex-col max-sm:gap-0`}>
+                    <p className="font-bold text-[1.9rem]">{personalInfo.name}</p>
+                    <p className="font-bold text-[1.7rem]">{personalInfo.name_en}</p>
+                </div>
                 <div className={`
                     flex min-md:flex-row max-sm:flex-col 
                     w-full gap-3 text-sm`}>
@@ -41,8 +44,8 @@ const PersonalInfo = (props: {
                     <div className={`flex flex-row items-center gap-1`}>
                         <SmartPhone01Icon size={20} />
                         {personalInfo.phone.map((phone, id) => (
-                            <Link 
-                                href={`tel:${phone.area}${phone.number}`} 
+                            <Link
+                                href={`tel:${phone.area}${phone.number}`}
                                 key={id}>
                                 <div className={`flex flex-row gap-1`}>
                                     <p>{`${phone.area} ${phone.number}`}</p>
