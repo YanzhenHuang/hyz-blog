@@ -25,6 +25,64 @@ export default function LLM() {
     const textAreaRef = createRef<HTMLTextAreaElement>();
     const scrollContainerRef = createRef<HTMLDivElement>();
 
+    const ask = () => {
+        if (!textAreaRef.current?.value) {
+            toast({
+                title: '请至少输入一个文字~',
+                description: '欲要成其事，必先利其器',
+                action: (
+                    <ToastAction altText="知道了">知道了</ToastAction>
+                ),
+            });
+            return;
+        }
+
+        setRespondStatus(1);
+        const query = textAreaRef.current.value;
+        setChatList(list => [...list, { role: 'user', content: query }, { role: 'assistant', content: '' }])
+
+        textAreaRef.current.value = '';
+
+        let receivedContent = '';
+
+        chat(query, '', {
+            yieldMessage: (msg: FrontendMessages) => {
+                console.log(msg);
+                if (msg.type != 'process') {
+                    setRespondStatus(2);
+                }
+
+                if (msg.type == 'text') {
+                    receivedContent += msg.message;
+                    setChatList(list => {
+                        const newList = [...list];
+                        const lastItem = newList[newList.length - 1];
+                        if (lastItem && lastItem.role === 'assistant') {
+                            // 在最后一个元素的content中添加新字符
+                            lastItem.content = receivedContent;
+                        }
+                        return newList;
+                    });
+                }
+            },
+            onEnd: () => {
+                setRespondStatus(0);
+            },
+            onError: (error) => {
+                setRespondStatus(0);
+                toast({
+                    title: '哎呀，有点小错误！',
+                    description: '可能是服务器开小差啦，等会再问呗QAQ',
+                    action: (
+                        <ToastAction altText="知道了">知道了</ToastAction>
+                    ),
+                });
+                console.log('嘿嘿，我就知道你会点进来看~ 呐，下面就是错误，别笑我哦↓');
+                console.error(error);
+            }
+        });
+    }
+
     const { toast } = useToast();
 
     useEffect(() => {
@@ -105,64 +163,14 @@ export default function LLM() {
                     ref={textAreaRef}
                     placeholder={respondStatus ? '请等待LLM回答结束^ω^' : `请问问题~`}
                     className={`resize-none`}
-                    disabled={respondStatus > 0} />
-                <Button onClick={() => {
-                    if (!textAreaRef.current?.value) {
-                        toast({
-                            title: '请至少输入一个文字~',
-                            description: '欲要成其事，必先利其器',
-                            action: (
-                                <ToastAction altText="知道了">知道了</ToastAction>
-                            ),
-                        });
-                        return;
-                    }
-
-                    setRespondStatus(1);
-                    const query = textAreaRef.current.value;
-                    setChatList(list => [...list, { role: 'user', content: query }, { role: 'assistant', content: '' }])
-
-                    textAreaRef.current.value = '';
-
-                    let receivedContent = '';
-
-                    chat(query, '', {
-                        yieldMessage: (msg: FrontendMessages) => {
-                            console.log(msg);
-                            if (msg.type != 'process') {
-                                setRespondStatus(2);
-                            }
-
-                            if (msg.type == 'text') {
-                                receivedContent += msg.message;
-                                setChatList(list => {
-                                    const newList = [...list];
-                                    const lastItem = newList[newList.length - 1];
-                                    if (lastItem && lastItem.role === 'assistant') {
-                                        // 在最后一个元素的content中添加新字符
-                                        lastItem.content = receivedContent;
-                                    }
-                                    return newList;
-                                });
-                            }
-                        },
-                        onEnd: () => {
-                            setRespondStatus(0);
-                        },
-                        onError: (error) => {
-                            setRespondStatus(0);
-                            toast({
-                                title: '哎呀，有点小错误！',
-                                description: '可能是服务器开小差啦，等会再问呗QAQ',
-                                action: (
-                                    <ToastAction altText="知道了">知道了</ToastAction>
-                                ),
-                            });
-                            console.log('嘿嘿，我就知道你会点进来看~ 呐，下面就是错误，别笑我哦↓');
-                            console.error(error);
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            ask();
                         }
-                    });
-                }}>发送
+                    }}
+                    disabled={respondStatus > 0} />
+                <Button onClick={ask}>发送
                 </Button>
             </div>
         </div>
