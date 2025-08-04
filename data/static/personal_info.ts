@@ -43,7 +43,7 @@ export const personalInfo: PersonalInfo = {
             major: "Computer Science",
             degree: "BSc",
             start_date: "Aug 2021",
-            end_date: "Cur",
+            end_date: "Jun 2025",
             gpa: "3.76/4",
         },
         {
