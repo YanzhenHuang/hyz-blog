@@ -178,14 +178,29 @@ interface PersonalInfo {
  * LLM-Related
  */
 
+type LLMEventTypes = 
+| 'node_started' 
+| 'node_finished' 
+| 'workflow_started' 
+| 'workflow_finished' 
+| 'message' 
+| 'message_end';
+
+/**
+ * 基础事件
+ */
 interface LLMEventBase {
-    conversation_id: string;  
+    event: LLMEventTypes;
+    conversation_id: string;
     message_id: string;
     created_at: number;
     task_id: string;
 };
 
-interface LLMNodeStarted extends LLMEventBase{
+/**
+ * Dify Workflow节点开始事件
+ */
+interface LLMNodeStarted extends LLMEventBase {
     event: 'node_started';
     workflow_run_id: string;
     data: {
@@ -198,6 +213,82 @@ interface LLMNodeStarted extends LLMEventBase{
     } & any;
 };
 
+/**
+ * Dify Workflow节点结束事件
+ */
+interface LLMNodeFinished extends LLMEventBase {
+  event: 'node_finished';
+  workflow_run_id: string;
+  data: {
+    id: string;
+    node_id: string;
+    node_type: string;
+    title: string;
+    index: number;
+    predecessor_node_id: string | null;
+    inputs: Record<string, any> | null;
+    process_data?: Record<string, any>;
+    outputs?: Record<string, any>;
+    status: 'succeeded' | 'failed';
+    error: string | null;
+    elapsed_time: number;
+    execution_metadata: Record<string, any>;
+    created_at: number;
+    finished_at: number;
+    files?: any[];
+    parallel_id?: string | null;
+    parent_parallel_id?: string | null;
+    parent_parallel_start_node_id?: string | null;
+    iteration_id?: string | null;
+    loop_id?: string | null;
+  };
+};
+
+/**
+ * Dify 整个Workflow执行开始事件
+ */
+interface LLMWorkflowStarted extends LLMEventBase {
+  event: 'workflow_started';
+  workflow_run_id: string;
+  data: {
+    id: string; // workflow_run_id 的复制
+    workflow_id: string;
+    inputs: Record<string, any>; // sys.query, sys.user_id, sys.files, ...
+    created_at: number;
+  };
+}
+
+/**
+ * Dify 整个Workflow执行完成事件
+ */
+interface LLMWorkflowFinished extends LLMEventBase {
+  event: 'workflow_finished';
+  workflow_run_id: string;
+  data: {
+    id: string;
+    status: 'succeeded' | 'failed' | 'cancelled';
+    error: string | null;
+    created_at: number;
+    finished_at: number;
+    outputs?: Record<string, any>;
+    execution_metadata: Record<string, any>;
+    files?: any[];
+  };
+};
+
+/**
+ * LLM 响应正式结束事件
+ */
+interface LLMMessageEnd extends LLMEventBase {
+  event: 'message_end';
+  data: {
+    reason?: string;
+  };
+}
+
+/** 
+ * LLM 流式响应事件
+ */
 interface LLMMessage extends LLMEventBase {
     event: 'message';
     id: string;
@@ -205,11 +296,17 @@ interface LLMMessage extends LLMEventBase {
     from_variable_selector: string[];
 }
 
-type LLMEvents = LLMNodeStarted | LLMMessage;
+type LLMEvents =
+  | LLMWorkflowStarted
+  | LLMNodeStarted
+  | LLMNodeFinished
+  | LLMWorkflowFinished
+  | LLMMessage
+  | LLMMessageEnd;
 
 /** Frontend */
 
-type FrontendMessageTypes = 'text' | 'process';
+type FrontendMessageTypes = 'text' | 'process' | 'ended';
 
 interface FrontendMessageBase {
     type: FrontendMessageTypes;
@@ -225,8 +322,11 @@ interface FrontendMessageProcess extends FrontendMessageBase {
     type: 'process';
 }
 
-interface FrontendMessageError extends FrontendMessageBase {
-    type: 'error';
+interface FrontendMessageEnded extends FrontendMessageBase {
+    type: 'ended';
 }
 
-type FrontendMessages = FrontendMessageText | FrontendMessageProcess | FrontendMessageError;
+type FrontendMessages = 
+| FrontendMessageText 
+| FrontendMessageProcess 
+| FrontendMessageEnded;

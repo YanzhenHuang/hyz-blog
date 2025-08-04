@@ -6,6 +6,7 @@ import { chat } from "@/lib/llm";
 import { useToast } from "@/hooks/use-toast"
 import { ToastAction } from "@/components/ui/toast"
 import { scrollToBottom } from "@/lib/ui-tools";
+import { useMemo } from "react";
 
 export type Chat = {
     content: string,
@@ -85,81 +86,84 @@ export default function LLM() {
         });
     }
 
-    
-
     useEffect(() => {
         if (!scrollContainerRef.current)
             return;
         scrollToBottom(scrollContainerRef);
-    }, [chatList, scrollContainerRef])
+    }, [chatList, scrollContainerRef]);
+
+    /**
+     * 聊天列表相关
+     */
+
+    const chatElements = useMemo(() => {
+        return chatList.map((chat, i) => {
+            let style = ''
+            switch (chat.role) {
+                case 'assistant':
+                    style = `
+                        flex flex-row text-justify 
+                        ml-auto w-full`;
+                    break;
+                case 'user':
+                    style = `
+                        flex flex-row text-justify ml-auto
+                        bg-[#dedede] dark:bg-[#1e1e1e]
+                        rounded-lg w-full max-w-fit
+                        px-5 py-2`
+            }
+
+            return (
+                <div key={i}>
+                    <span className={style}>
+                        {realtimeChatContent(chat, i)}
+                    </span>
+                </div>);
+        });
+    }, [chatList, respondStatus]);
+
+    const isLastMessage = useMemo(() => {
+        return (index: number) => index === chatList.length - 1;
+    }, [chatList.length]);
+
+    const shouldShowBullet = useMemo(() => {
+        return (role: string, index: number) =>
+            isLastMessage(index) &&
+            role === 'assistant' &&
+            respondStatus === 2;
+    }, [isLastMessage, respondStatus]);
+
+    const realtimeChatContent = useMemo(() => {
+        return (chat: Chat, index: number) => {
+            return `${chat.content}${shouldShowBullet(chat.role, index) ? '⬤' : ''}`;
+        };
+    }, [shouldShowBullet]);
 
     return (
         <div className={`flex flex-col gap-2 w-full`}>
+            {/** 
+             * Main Chat Panel
+            */}
             <div className={`
                 flex flex-col w-full h-80
-                border border-[#00000055] dark:border-[#ffffff22] rounded-md 
-                
-                `}>
+                border border-[#00000055] dark:border-[#ffffff22] rounded-md`}>
+                {/** Chat List */}
                 <div
                     ref={scrollContainerRef}
                     className={`
                     flex flex-col w-full gap-3 px-5 py-2
                     overflow-y-auto simplified-scrollbar`}>
-                    {chatList.map((chat, i) => {
-                        switch (chat.role) {
-                            case 'assistant':
-                                return (
-                                    <div key={i}>
-                                        <span className={`
-                                            flex flex-row text-justify ml-auto
-                                            w-full`}>
-                                            {`${chat.content}${(
-                                                i == chatList.length - 1 &&
-                                                respondStatus == 2) ?
-                                                '⬤' : ''}`}
-                                        </span>
-                                    </div>
-                                );
-                            case 'user':
-                                return (
-                                    <div key={i}>
-                                        <span className={`
-                                            flex flex-row text-justify ml-auto
-                                            bg-[#dedede] dark:bg-[#1e1e1e]
-                                            rounded-lg w-full max-w-fit
-                                            px-5 py-2`}>
-                                            {`${chat.content}${(
-                                                i == chatList.length - 1 &&
-                                                respondStatus == 2) ?
-                                                '⬤' : ''}`}
-                                        </span>
-                                    </div>
-                                );
-                        }
-                    }
-                        // (
-                        //     <div key={i}>
-                        //         <span className={`
-                        //         flex flex-row text-justify ml-auto
-                        //         ${chat.role == 'user' ? 'w-1/2' : 'w-full'} 
-                        //         ${chat.role == 'user' && 'bg-[#1e1e1e55]'}
-                        //         px-5 py-2 rounded-lg`}>
-                        //             {`${chat.content}${(
-                        //                 i == chatList.length - 1 &&
-                        //                 chat.role == 'assistant' &&
-                        //                 respondStatus == 2) ?
-                        //                 '⬤' : ''}`}
-                        //         </span>
-                        //     </div>
-                        // )
-                    )}
+                    {chatElements}
                 </div>
+                {/** 思考中Tag */}
                 {respondStatus == 1 && (
                     <div className={`flex flex-row px-5 italic opacity-50`}>
-                        思考中...
+                        {`思考中...`}
                     </div>
                 )}
             </div>
+
+            {/** Input & Send */}
             <div className={`flex flex-row items-center gap-2`}>
                 <Textarea
                     ref={textAreaRef}
@@ -172,7 +176,8 @@ export default function LLM() {
                         }
                     }}
                     disabled={respondStatus > 0} />
-                <Button onClick={ask}>发送
+                <Button onClick={ask}>
+                    {`发送`}
                 </Button>
             </div>
         </div>
