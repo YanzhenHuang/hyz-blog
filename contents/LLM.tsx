@@ -25,6 +25,8 @@ export default function LLM() {
     const textAreaRef = createRef<HTMLTextAreaElement>();
     const scrollContainerRef = createRef<HTMLDivElement>();
 
+    const { toast } = useToast();
+
     const ask = () => {
         if (!textAreaRef.current?.value) {
             toast({
@@ -83,7 +85,7 @@ export default function LLM() {
         });
     }
 
-    const { toast } = useToast();
+    
 
     useEffect(() => {
         if (!scrollContainerRef.current)
@@ -123,7 +125,7 @@ export default function LLM() {
                                     <div key={i}>
                                         <span className={`
                                             flex flex-row text-justify ml-auto
-                                            bg-[#dedede] dark:bg-[#fefefe]
+                                            bg-[#dedede] dark:bg-[#1e1e1e]
                                             rounded-lg w-full max-w-fit
                                             px-5 py-2`}>
                                             {`${chat.content}${(
