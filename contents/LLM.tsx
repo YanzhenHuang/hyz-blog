@@ -96,6 +96,23 @@ export default function LLM() {
      * 聊天列表相关
      */
 
+    const isLastMessage = useMemo(() => {
+        return (index: number) => index === chatList.length - 1;
+    }, [chatList.length]);
+
+    const shouldShowBullet = useMemo(() => {
+        return (role: string, index: number) =>
+            isLastMessage(index) &&
+            role === 'assistant' &&
+            respondStatus === 2;
+    }, [isLastMessage, respondStatus]);
+
+    const realtimeChatContent = useMemo(() => {
+        return (chat: Chat, index: number) => {
+            return `${chat.content}${shouldShowBullet(chat.role, index) ? '⬤' : ''}`;
+        };
+    }, [shouldShowBullet]);
+
     const chatElements = useMemo(() => {
         return chatList.map((chat, i) => {
             let style = ''
@@ -122,22 +139,7 @@ export default function LLM() {
         });
     }, [chatList, respondStatus]);
 
-    const isLastMessage = useMemo(() => {
-        return (index: number) => index === chatList.length - 1;
-    }, [chatList.length]);
 
-    const shouldShowBullet = useMemo(() => {
-        return (role: string, index: number) =>
-            isLastMessage(index) &&
-            role === 'assistant' &&
-            respondStatus === 2;
-    }, [isLastMessage, respondStatus]);
-
-    const realtimeChatContent = useMemo(() => {
-        return (chat: Chat, index: number) => {
-            return `${chat.content}${shouldShowBullet(chat.role, index) ? '⬤' : ''}`;
-        };
-    }, [shouldShowBullet]);
 
     return (
         <div className={`flex flex-col gap-2 w-full`}>
