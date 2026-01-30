@@ -55,7 +55,7 @@ const GitHubStatus = (props: {
             <div className="flex flex-col items-center gap-2 justify-center">
                 <CardTitle className="w-full p-1">Personal Repos</CardTitle>
                 <Carousel
-                    className="flex flex-col rounded-md border w-[16rem] max-md:w-[14rem] max-sm:w-[14rem]"
+                    className="flex flex-col rounded-md border w-2/3 max-md:w-[14rem] max-sm:w-[14rem]"
                     opts={{
                         align: "start",
                         loop: true,
@@ -64,9 +64,13 @@ const GitHubStatus = (props: {
                     {/** Repository list carousel */}
                     <CarouselContent>
                         {reposData.map((repo, id) => (
-                            <CarouselItem key={id} className="relative">
+                            <CarouselItem key={id} className="relative md:basis-1/2">
                                 <Link href={repo.html_url} target="_blank">
-                                    <div className="flex flex-col gap-2 p-3 pb-10 h-full">
+                                    <div className={`
+                                        flex flex-col gap-2 p-3 pb-10 h-full 
+                                        hover:bg-customGray-100 dark:hover:bg-customGray-800 
+                                        rounded-md transition-colors`}>
+
                                         {/** Repo title */}
                                         <div className="flex flex-row items-center justify-between">
                                             <div className="flex flex-row items-center justify-start gap-2">

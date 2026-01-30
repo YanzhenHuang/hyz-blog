@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 
 import { ThemeProvider } from "@/components/theme-provider";
 
 import { Toaster } from "@/components/ui/toaster";
+import { Locale } from "@/i18n/config";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,13 +22,19 @@ export const metadata: Metadata = {
   description: "Huang Yanzhen's personal tech blog.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: { locale: Locale };
 }>) {
+
+  const resolvedParams = await params;
+  const locale = resolvedParams.locale;
+
   return (
-    <html lang="en">
+    <html lang={locale || 'zh-CN'}>
       <ThemeProvider
         attribute="class"
         defaultTheme="system"

@@ -13,11 +13,16 @@ export type Chat = {
     role: "user" | "assistant",
 }
 
-export default function LLM() {
+export default function LLM(params: {
+    dict: any
+}) {
+
+    const { dict } = params;
+
     const [chatList, setChatList] = useState<Chat[]>([
         {
             'role': 'assistant',
-            'content': '我是黄彦祯的代理LLM，请问我你想问的问题！'
+            'content': dict.llm.assistant_intro,
         },
     ]);
 
@@ -31,10 +36,12 @@ export default function LLM() {
     const ask = () => {
         if (!textAreaRef.current?.value) {
             toast({
-                title: '请至少输入一个文字~',
-                description: '欲要成其事，必先利其器',
+                title: dict.llm.question_empty_toast_title,
+                description: dict.llm.question_empty_toast_description,
                 action: (
-                    <ToastAction altText="知道了">知道了</ToastAction>
+                    <ToastAction altText={dict.ui.user_ok}>
+                        {dict.ui.user_ok}
+                    </ToastAction>
                 ),
             });
             return;
@@ -74,13 +81,13 @@ export default function LLM() {
             onError: (error) => {
                 setRespondStatus(0);
                 toast({
-                    title: '哎呀，有点小错误！',
-                    description: '可能是服务器开小差啦，等会再问呗QAQ',
+                    title: dict.llm.server_error_toast_title,
+                    description: dict.llm.server_error_toast_description,
                     action: (
-                        <ToastAction altText="知道了">知道了</ToastAction>
+                        <ToastAction altText={dict.ui.user_ok}>{dict.ui.user_ok}</ToastAction>
                     ),
                 });
-                console.log('嘿嘿，我就知道你会点进来看~ 呐，下面就是错误，别笑我哦↓');
+                console.log(dict.llm.console_log_for_employer);
                 console.error(error);
             }
         });
@@ -148,19 +155,26 @@ export default function LLM() {
             */}
             <div className={`
                 flex flex-col w-full h-80
-                border border-[#00000055] dark:border-[#ffffff22] rounded-md`}>
+                border border-customGray-200 dark:border-customGray-800 rounded-md`}>
+
                 {/** Chat List */}
                 <div
                     ref={scrollContainerRef}
                     className={`
                     flex flex-col w-full gap-3 px-5 py-2
                     overflow-y-auto simplified-scrollbar`}>
+                    {/** Temporary System Message */}
+                    <p className="text-xs italic opacity-50">
+                        {dict.llm.safe_declare}
+                    </p>
+
+                    {/** Chat List */}
                     {chatElements}
                 </div>
                 {/** 思考中Tag */}
                 {respondStatus == 1 && (
                     <div className={`flex flex-row px-5 italic opacity-50`}>
-                        {`思考中...`}
+                        {dict.llm.thinking}
                     </div>
                 )}
             </div>
@@ -169,7 +183,7 @@ export default function LLM() {
             <div className={`flex flex-row items-center gap-2`}>
                 <Textarea
                     ref={textAreaRef}
-                    placeholder={respondStatus ? '请等待LLM回答结束^ω^' : `请问问题~`}
+                    placeholder={respondStatus ? dict.llm.please_wait : dict.llm.please_ask}
                     className={`resize-none`}
                     onKeyDown={(e) => {
                         if (e.key === 'Enter' && !e.shiftKey) {
@@ -178,8 +192,8 @@ export default function LLM() {
                         }
                     }}
                     disabled={respondStatus > 0} />
-                <Button onClick={ask}>
-                    {`发送`}
+                <Button onClick={ask} disabled={respondStatus > 0}>
+                    {dict.ui.send}
                 </Button>
             </div>
         </div>

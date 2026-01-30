@@ -171,7 +171,6 @@ interface PersonalInfo {
     github: string;
     prizes: Prize[];
     education: Education[];
-    intro: string;
 };
 
 /**

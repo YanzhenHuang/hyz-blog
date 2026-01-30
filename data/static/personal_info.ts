@@ -6,7 +6,7 @@ export const personalInfo: PersonalInfo = {
     avatar_url: "https://s2.loli.net/2025/02/03/kVnMuKbh9OecvZY.png",
     phone: [
         { area: "+86", number: "17841574072" },
-        { area: "+853", number: "62375735" },
+        { area: "+852", number: "46625747" },
     ],
     email: {
         work: ["yanzhenhuangwork@gmail.com"],
@@ -34,6 +34,16 @@ export const personalInfo: PersonalInfo = {
             date: "2025/05/23",
             issuer: "澳門大學科技學院 | UM FST",
             link: "https://www.cis.um.edu.mo/bestfyp.html",
+        },
+        {
+            title: {
+                CN: "澳门大学全免奖学金（2021-2025）",
+                EN: "University of Macau Full Scholarship (2021-2025)"
+            },
+            about: "奖学金",
+            date: "2021/08/01",
+            issuer: "澳門大學 | University of Macau",
+            link: "https://reg.um.edu.mo/admissions/nonlocal/mainland/gk/scholarship/?lang=zh-hant",
         }
     ],
     education: [
@@ -41,9 +51,9 @@ export const personalInfo: PersonalInfo = {
             institution: "University of Macau",
             url: "https://www.um.edu.mo/",
             major: "Computer Science",
-            degree: "BSc",
-            start_date: "Aug 2021",
-            end_date: "Jun 2025",
+            degree: "B.S.",
+            start_date: "2021/08",
+            end_date: "2025/06",
             gpa: "3.76/4",
         },
         {
@@ -51,13 +61,10 @@ export const personalInfo: PersonalInfo = {
             url: "https://hkust.edu.hk/",
             major: "Information Technology",
             degree: "MSc",
-            start_date: "Sep 2025",
-            end_date: "2026",
-            gpa: "TBA",
+            start_date: "2025/09",
+            end_date: "2026/07",
+            gpa: "3.92/4",
         },
     ],
-    intro: `
-    Graduate of University of Macau, majored in computer science.
-    Specialized in full-stack development and Machine learning. 
-  `,
+
 };

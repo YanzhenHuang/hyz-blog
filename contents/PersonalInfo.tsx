@@ -2,7 +2,7 @@
 
 // Shadcn
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ModeToggle } from "@/components/ui/theme-toggle";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import {
     HoverCard,
     HoverCardContent,
@@ -15,19 +15,21 @@ import { Mail01Icon, SmartPhone01Icon } from "hugeicons-react";
 // React
 import Link from "next/link";
 import Image from "next/image";
+import LanguageSwitcher from "@/components/ui/language-switcher";
 
 
 const PersonalInfo = (props: {
+    dict: any,
     personalInfo: PersonalInfo
 }) => {
     const { personalInfo } = props;
     return (
         <div className={`
-            flex flex-row w-full 
+            flex flex-col md:flex-row gap-4 w-full 
             items-center justify-between mb-6`}>
             {/* Basic Info */}
-            <div className={`flex flex-col gap-2`}>
-                <div className={`flex flex-row gap-2 items-baseline max-sm:flex-col max-sm:gap-0`}>
+            <div className={`flex flex-col gap-2 items-center md:items-start`}>
+                <div className={`flex flex-row gap-2 items-center md:items-baseline max-sm:flex-col max-sm:gap-0`}>
                     <p className="font-bold text-[1.9rem]">{personalInfo.name}</p>
                     <p className="font-bold text-[1.7rem]">{personalInfo.name_en}</p>
                 </div>
@@ -61,7 +63,10 @@ const PersonalInfo = (props: {
 
             <div className="flex flex-row justify-center items-center gap-4">
                 {/** Theme Toggle */}
-                <ModeToggle />
+                <ThemeToggle />
+                
+                <LanguageSwitcher dict={props.dict}/>
+                
 
                 {/*Avatar */}
                 <HoverCard>
