@@ -10,7 +10,7 @@ import { Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/server";
 
 interface PageProps {
-  params: { locale: Locale };
+  params: Promise<{ locale: Locale }>;
 }
 
 export default async function Home({ params }: PageProps) {

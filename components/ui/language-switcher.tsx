@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client"
 
 import { Languages } from "lucide-react";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
@@ -21,7 +23,7 @@ import { Spinner } from "./spinner";
 
 
 const LanguageSwitcher = (params: {
-    dict: any //@typescript-eslint/no-explicit-any
+    dict: any & {ui: {select_language: string}}
 }) => {
 
     const { dict } = params;
@@ -32,14 +34,15 @@ const LanguageSwitcher = (params: {
 
     const currentLocale = pathname.split('/')[1];
     const validLocales = i18n.locales;
-    const handleLocaleChange = (newLocale: Locale) => {
+
+    const handleLocaleChange = useCallback((newLocale: Locale) => {
         startTransition(() => {
             const newPath = pathname.replace(/^\/[^\/]+/, `/${newLocale}`);
             router.push(newPath);
 
-            document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=3153600`;
+            document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000`;
         });
-    }
+    }, [pathname, router]);
 
     useEffect(() => {
         if (!isLocaleValid(currentLocale)) {
