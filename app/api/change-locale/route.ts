@@ -16,6 +16,6 @@ export async function POST(request: NextRequest) {
 
         return Response.json({ success: true });
     } catch (e) {
-        return Response.json({ error: 'Error setting locale' }, { status: 500 });
+        return Response.json({ error: `Error setting locale ${e}.` }, { status: 500 });
      }
 }

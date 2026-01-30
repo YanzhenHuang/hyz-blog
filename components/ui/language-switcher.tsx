@@ -1,7 +1,7 @@
 "use client"
 
 import { Languages } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
@@ -21,7 +21,7 @@ import { Spinner } from "./spinner";
 
 
 const LanguageSwitcher = (params: {
-    dict: any
+    dict: any //@typescript-eslint/no-explicit-any
 }) => {
 
     const { dict } = params;
@@ -45,7 +45,7 @@ const LanguageSwitcher = (params: {
         if (!isLocaleValid(currentLocale)) {
             handleLocaleChange(i18n.defaultLocale);
         }
-    }, [currentLocale]);
+    }, [currentLocale, handleLocaleChange]);
 
     return (
         <DropdownMenu>
