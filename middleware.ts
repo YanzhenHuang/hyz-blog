@@ -1,4 +1,4 @@
-import {i18n, isLocaleValid, type Locale} from './i18n/config';
+import {i18n, isLocaleValid} from './i18n/config';
 import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {
