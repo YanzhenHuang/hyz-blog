@@ -17,7 +17,8 @@ import {
 } from "@/components/ui/carousel";
 
 // Icons
-import { GitBranchIcon } from "hugeicons-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { GitBranchIcon } from "@hugeicons/core-free-icons";
 
 // React
 import Link from "next/link";
@@ -78,10 +79,11 @@ const GitHubStatus = (props: {
                                                     {repo.name}
                                                 </CardTitle>
                                                 {repo.fork && (
-                                                    <GitBranchIcon
-                                                        size={15}
-                                                        color={"#0969da"}
-                                                    />
+                                                    // <GitBranchIcon
+                                                    //     size={15}
+                                                    //     color={"#0969da"}
+                                                    // />
+                                                    <HugeiconsIcon icon={GitBranchIcon} size={24} color="#000000" />
                                                 )}
                                             </div>
                                             <CardDescription>

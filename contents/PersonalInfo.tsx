@@ -10,7 +10,9 @@ import {
 } from "@/components/ui/hover-card";
 
 // Icons
-import { Mail01Icon, SmartPhone01Icon } from "hugeicons-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+
+import { Mail01Icon, SmartPhone01Icon } from "@hugeicons/core-free-icons";
 
 // React
 import Link from "next/link";
@@ -39,12 +41,12 @@ const PersonalInfo = (props: {
                     <Link
                         href={`mailto:${personalInfo.email.work[0]}`}
                         className="flex flex-row items-center gap-1">
-                        <Mail01Icon size={20} />
+                        <HugeiconsIcon icon={Mail01Icon} size={20} />
                         <p>{personalInfo.email.work[0]}</p>
                     </Link>
 
                     <div className={`flex flex-row items-center gap-1`}>
-                        <SmartPhone01Icon size={20} />
+                        <HugeiconsIcon icon={SmartPhone01Icon} size={20} />
                         {personalInfo.phone.map((phone, id) => (
                             <Link
                                 href={`tel:${phone.area}${phone.number}`}
