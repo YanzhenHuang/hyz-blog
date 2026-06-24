@@ -63,7 +63,7 @@ export const personalInfo: PersonalInfo = {
             degree: "MSc",
             start_date: "2025/09",
             end_date: "2026/07",
-            gpa: "3.92/4",
+            gpa: "4.02/4",
         },
     ],
 

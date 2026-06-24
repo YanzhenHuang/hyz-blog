@@ -31,7 +31,7 @@ const en = {
     intro_card: {
         card_title: "Introduction",
         card_subtitle: "A brief summary about me.",
-        intro: "Undergraduate graduate from University of Macau, majoring in Computer Science, currently pursuing MSc in Information Technology at HKUST. Specialized in full-stack development and Machine learning.",
+        intro: "Undergraduate graduate from University of Macau, majoring in Computer Science, graduating from program MSc in Information Technology at HKUST. Specialized in full-stack development and Machine learning. I possess the following technical backgrounds. First, I am familiar with the configuration and use of Python virtual environments and PyTorch libraries under Linux; I am proficient in using various data processing libraries (Pandas, Numpy). Building upon this foundation, during my master's studies, I developed skills in reproducing cutting-edge LLM papers, fine-tuning LLM LoRA (including GPT2 and Qwen3 series), and applying and evaluating data processing and downstream tasks (common sense reasoning, hallucination detection, etc.). I also have experience using the Spark framework for big data analysis. In terms of front-end engineering, I have a good understanding of the Node.js technology stack, NextJS, and React frameworks, am proficient in TypeScript, and can skillfully use deployment tools such as Docker.",
     },
     education: {
         card_title: "Education",

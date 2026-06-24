@@ -31,7 +31,7 @@ const zhCN = {
     intro_card: {
         card_title: "自我介绍",
         card_subtitle: "一些关于我的信息",
-        intro: "本科毕业于澳门大学计算机专业，香港科技大学信息技术专业硕士在读。专注于全栈开发和机器学习。",
+        intro: "本科毕业于澳门大学计算机专业，香港科技大学信息技术专业硕士毕业中。专注于全栈开发和机器学习。我具有方面的技术背景。首先，我熟悉 Linux 下的 Python 虚拟环境及 PyTorch 库的配置与使用；熟练使用多种数据处理相关库 (Pandas, Numpy)。在此基础上，我在硕士学习中培养了LLM前沿论文复现、LLM LoRA微调（包括GPT2、Qwen3系列）、数据处理与下游任务应用与评估（常识推理、幻觉检测等）的技能；我还具有使用Spark框架进行大数据分析的经验。前端工程化方面，我较了解 Node.js 技术栈、 NextJS 与 React 框架，熟练使用 TypeScript，并且能够熟练熟练使用 Docker 等部署工具。",
     },
     education: {
         card_title: "教育背景",
