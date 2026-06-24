@@ -89,16 +89,20 @@ export async function chat(
     try {
         // Request and receive stream obj.
         const res_hyz = await fetch(
-            "https://www.huangyanzhen-backend.dev/chat",
+            // "https://www.huangyanzhen-backend.dev/chat",
             // "http://localhost:7016/chat",
+            "/api/chat",
             {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    "Accept": 'text/event-stream',
                 },
                 body: JSON.stringify({
                     query,
+                    user: "test-user",
                     conversation_id,
+                    inputs: {}
                 }),
             });
 
