@@ -102,7 +102,8 @@ export async function chat(
                     query,
                     user: "test-user",
                     conversation_id,
-                    inputs: {}
+                    inputs: {},
+                    private: true,
                 }),
             });
 
